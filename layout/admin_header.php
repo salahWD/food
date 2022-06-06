@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark" >
   <div class="container">
-    <a class="navbar-brand" href="#"><?php echo $configration->R_name;?></a>
+    <a class="navbar-brand" href="#"><?php echo $general->name;?></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -8,10 +8,10 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-          <a class="nav-link" href="<?php echo router("food");?>">manage food</a>
+          <a class="nav-link" href="<?php echo Router::get_path("food");?>">manage food</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="<?php echo router("category");?>">manage category</a>
+          <a class="nav-link" href="<?php echo Router::get_path("category");?>">manage category</a>
         </li>
         <!-- <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

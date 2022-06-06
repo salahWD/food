@@ -60,7 +60,7 @@
         'image'	        => $img_link
       ]);
 
-      header("Location: " . M_URL . "category");
+      header("Location: " . M_PATH . "category");
       exit();
       
     }
@@ -85,7 +85,7 @@
   <div class="card info-container text-center">
     <div class="card-body">
       <p class="card-text text-dark mb-4">please fill out all of the input fields</p>
-      <form class="form" method="POST" action="<?php echo router("category");?>" enctype="multipart/form-data">
+      <form class="form" method="POST" action="<?php echo Router::get_path("category");?>" enctype="multipart/form-data">
         <input class="hidden" type="file" name="cat_img" id="update-img-input">
         <div class="form-group">
           <label for="title">title</label>

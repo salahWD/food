@@ -1,15 +1,8 @@
-<?php
-
-  $categories = $db->table('categories')->select('id, name')->get();
-
-  $foods = $db->table('foods')->select('id, name, price, description, image')->get();
-
-?>
 <div class="container">
   <main>
     <header class="row tm-welcome-section">
-      <h2 class="col-12 text-center tm-section-title">Welcome to Simple House</h2>
-      <p class="col-12 text-center">Total 3 HTML pages are included in this template. Header image has a parallax effect. You can feel free to download, edit and use this TemplateMo layout for your commercial or non-commercial websites.</p>
+      <h2 class="col-12 text-center tm-section-title">Home Page</h2>
+      <p class="col-12 text-center">Here Is Some Content</p>
     </header>
     
     <div class="tm-paging-links">
@@ -31,7 +24,7 @@
             <figure>
               <img src="<?php echo $food->image;?>" alt="Image" class="img-fluid tm-gallery-img" />
               <figcaption>
-                <h4 class="tm-gallery-title"><?php echo $food->name;?></h4>
+                <h4 class="tm-gallery-title"><a href="<?php echo M_URL . "food/" . $food->id;?>"><?php echo $food->name;?></a></h4>
                 <p class="tm-gallery-description"><?php echo $food->description;?></p>
                 <p class="tm-gallery-price"><?php echo $food->price;?>$</p>
               </figcaption>

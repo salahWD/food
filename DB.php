@@ -20,6 +20,7 @@ $db_config = [
 ];
 
 class DB {
+	
 	private static $instance = null;
 	private $dbh = null, $table, $columns, $sql, $bindValues, $getSQL,
 	$where, $orWhere, $whereCount=0, $isOrWhere = false,

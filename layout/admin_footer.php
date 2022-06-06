@@ -111,7 +111,7 @@
   <!-- Copyright -->
   <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
     © 2020 Copyright:
-    <a class="text-white" href="https://github.com/salahwd"><?php echo $configration->R_name;?></a>
+    <a class="text-white" href="https://github.com/salahwd"><?php echo $general->name;?></a>
   </div>
   <!-- Copyright -->
 </footer>

@@ -18,8 +18,12 @@ function createFoodsCards(res) {
       
       let title = $("<h4>");
       title.addClass("tm-gallery-title");
-      title.text(data.name);
       caption.append(title);
+
+      let link = $("<a>");
+      link.attr("href", `http://localhost/food/food/${data.id}`);
+      link.text(data.name);
+      title.append(link);
       
       let description = $("<p>");
       description.addClass("tm-gallery-description");
@@ -57,8 +61,111 @@ function getCat($id) {
     let cards = createFoodsCards(JSON.parse(res));
     
     // append the new foods
-    console.log(...cards);
     $(this).append(...cards);
 
+  });
+}
+
+function orderFood(food_id, orderCount) {
+
+  $.ajax({
+    url: `http://localhost/food/data/cart`,
+    type: "POST",
+    data: {
+      "id": food_id,
+      "count": parseInt(orderCount),
+    },
+  }).done(function(res) {
+    if (res) {
+      let notef = $("#notification");
+      let number = parseInt(notef.data("number")) + parseInt(orderCount);
+      notef.data("number", number);
+      notef.text(number);
+    }else {
+      console.error("You Should Handle This Error And Show It");
+    }
+  });
+}
+
+function updateOrderCount(food_id, newOrderCount) {
+
+  $.ajax({
+    url: `http://localhost/food/data/cart/update`,
+    type: "POST",
+    data: {
+      "id": food_id,
+      "new_count": parseInt(newOrderCount),
+    },
+  }).done(function(res) {
+    if (res) {
+      res = JSON.parse(res);
+      let notef = $("#notification");
+      let number = "Y";
+      notef.data("number", number);
+      notef.text(number);
+      let price = $("#total-price");
+      console.log(res.total_price);
+      price.data("number", res.total_price);
+      price.text(res.total_price);
+    }else {
+      console.error("You Should Handle This Error And Show It");
+    }
+  });
+}
+
+function deleteOrder(foodId) {
+
+  $.ajax({
+    url: `http://localhost/food/data/cart/deleteorder`,
+    type: "POST",
+    data: {
+      "id": foodId,
+    }
+  }).done(function(res) {
+    if (res) {
+      let price = $("#total-price");
+      price.data("number", res.total_price);
+      price.text(res.total_price);
+    }else {
+      console.error("You Should Handle This Error And Show It");
+    }
+  });
+}
+
+function payCart() {
+
+  $.ajax({
+    url: `http://localhost/food/data/cart/confirm`,
+    type: "POST",
+    data: {
+      "confirm": true,
+    }
+  }).done(function(res) {
+    if (res) {
+      res = JSON.parse(res);
+      let notef = $("#notification");
+      notef.data("number", 0);
+      notef.text(0);
+      console.log(res.msg);
+      console.log(`https://wa.me/${res.whatsapp}`);
+    }else {
+      console.error("You Should Handle This Error And Show It");
+    }
+  });
+}
+
+function clearCart() {
+
+  $.ajax({
+    url: `http://localhost/food/data/cart/delete`,
+    type: "POST",
+  }).done(function(res) {
+    if (res) {
+      let notef = $("#notification");
+      notef.data("number", 0);
+      notef.text(0);
+    }else {
+      console.error("You Should Handle This Error And Show It");
+    }
   });
 }

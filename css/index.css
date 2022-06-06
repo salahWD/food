@@ -514,3 +514,46 @@ p, address {
 }
 
 /* end custom forms */
+
+/* Start cart */
+.cart-container {
+  position: fixed;
+  top: 30px;
+  right: 90px;
+  z-index: 999;
+  padding: 20px 10px;
+}
+.cart-container i {
+  font-size: 2rem;
+  color: white;
+  text-shadow: #0000007a 0px 0px 13px;
+}
+.cart-container .notification {
+  font-size: 0.9rem;
+  font-weight: bold;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: #CC3333;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+}
+.cart-container .clear-cart {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  bottom: -50px;
+}
+.cart-container .clear-cart i {
+  font-size: 12px;
+}
+
+/* End cart */
