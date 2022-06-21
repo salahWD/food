@@ -3,17 +3,25 @@
 class dashboard_controller extends controller {
 
   public function default_action() {
+		/*
+		
+			1- check if admin
+			2- check and get the restaurant id
+			3- get the restaurant's required data
+			4- view the data
 
+		*/
+
+		
     $this->admin_check();
-
-    $db = DBC::get_instance();
-
-		$sql = $db->dbh->prepare("SELECT name FROM general WHERE id = ?");
-		$sql->execute([$_SESSION["user"]->id]);
-
-		if ($sql->rowCount() > 0) {
+		
+    include MODELS_URL . "manage.php";
+    $manage = new Manage($_SESSION["user"]->id);
+		
+		if ($manage->has_restaurant()) {
 			
-			$view_data["general"] = $sql->fetch(PDO::FETCH_LAZY);
+			$name = $manage->select_general("name");
+			$view_data["general"] = $name;
 			$template = new Template(null, 3, true);
 			$template->view("dashboard.php", $view_data);
 			

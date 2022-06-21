@@ -169,3 +169,160 @@ function clearCart() {
     }
   });
 }
+
+function deleteFood(id) {
+
+  $.ajax({
+    url: `http://localhost/food/manage/food/delete_food`,
+    type: "POST",
+    data: {
+      "food_id": id,
+    }
+  }).done(function(res) {
+    res = JSON.parse(res);
+    if (res) {
+      console.log(`food [${id}] deleted`);
+    }else {
+      console.error("You Should Handle This Error And Show It");
+    }
+  });
+
+}
+
+function deleteCategory(id, elm) {
+
+  $.ajax({
+    url: `http://localhost/food/manage/category/delete_category`,
+    type: "POST",
+    data: {
+      "id": id,
+    },
+    beforeSend : function (xhr) {
+      console.log(xhr);
+      let trig = confirm("you are going to lose all food inside this category");
+      if (!trig) {
+        xhr.abort();
+      }
+    },
+  }).done(function(res) {
+    res = JSON.parse(res);
+    if (res) {
+      let parent = elm.parents("[class*=\"col\"]");
+      parent.css("opacity", "0");
+      setTimeout(() => {
+        parent.remove();
+      }, 700);
+    }else {
+      console.error("You Should Handle This Error And Show It");
+    }
+  });
+
+}
+
+function updateFood(id) {
+  form = new FormData();
+  form.set("id", id);
+  form.set("name", $("#foodname").val());
+  form.set("price", $("#price").val());
+  form.set("description", $("#description").val());
+  form.set("image", $("#update-img-input")[0].files[0]);
+  const checkKeys = ["id", "name", "price", "description", "image"];
+  checkKeys.forEach(prop => {
+    if (!form.hasOwnProperty(prop)) {
+      return false;
+    }else {
+      if (prop != "image" && form.get(prop) == null) {
+        return false;
+      }
+    }
+  });
+  $.ajax({
+    url: `http://localhost/food/manage/food/update_food`,
+    type: "POST",
+    data: form,
+    processData: false,
+    contentType: false
+  }).done(function(res) {
+    res = JSON.parse(res);
+    if (res.success === true) {
+      location.href = "http://localhost/food/manage/food";
+    }else {
+      console.log(res);
+      console.error(res.error);
+    }
+  });
+
+
+}
+
+function updateCategory(id) {
+  form = new FormData();
+  form.set("id", id);
+  form.set("name", $("#foodname").val());
+  form.set("description", $("#description").val());
+  form.set("image", $("#update-img-input")[0].files[0]);
+  const checkKeys = ["id", "name", "description", "image"];
+  checkKeys.forEach(prop => {
+    if (!form.hasOwnProperty(prop)) {
+      return false;
+    }else {
+      if (prop != "image" && form.get(prop) == null) {
+        return false;
+      }
+    }
+  });
+  $.ajax({
+    url: `http://localhost/food/manage/category/update_category`,
+    type: "POST",
+    data: form,
+    processData: false,
+    contentType: false
+  }).done(function(res) {
+    res = JSON.parse(res);
+    if (res.success === true) {
+      location.href = "http://localhost/food/manage/category";
+    }else {
+      console.log(res);
+      console.error(res.error);
+    }
+  });
+
+
+}
+
+function updateGeneral() {
+  form = new FormData();
+  form.set("phone", $("#phone").val());
+  form.set("whatsapp", $("#whats").val());
+  form.set("msg", $("#whats-msg").val());
+  form.set("address", $("#address").val());
+  form.set("currency", $("#currency").val());
+  form.set("image", $("#update-img-input")[0].files[0]);
+  const checkKeys = ["phone", "whatsapp", "msg", "address", "currency", "image"];
+  checkKeys.forEach(prop => {
+    if (!form.hasOwnProperty(prop)) {
+      return false;
+    }else {
+      if (prop != "image" && form.get(prop) == null) {
+        return false;
+      }
+    }
+  });
+  $.ajax({
+    url: `http://localhost/food/manage/general/update`,
+    type: "POST",
+    data: form,
+    processData: false,
+    contentType: false
+  }).done(function(res) {
+    res = JSON.parse(res);
+    if (res.success === true) {
+      location.href = "http://localhost/food/manage/general";
+    }else {
+      console.log(res);
+      console.error(res.error);
+    }
+  });
+
+
+}

@@ -79,15 +79,18 @@ p {
 #login form span.fa {
   background-color: #fff;
   z-index: 100;
-  border-radius: 3px 0px 0px 3px;
+  border-radius: 3px;
   color: #000;
   display: block;
-  float: left;
   height: 50px;
   font-size:24px;
   line-height: 50px;
   text-align: center;
   width: 50px;
+}
+#login form span.fa:not(.fa-lock) {
+  position: relative;
+  top: 3px;
 }
 
 #login form {

@@ -111,10 +111,26 @@
 		
 	});
 
-	$router->get("manage/food", function () {
+	$router->get("manage/food/#id/#action", function ($id, $action) {
+		
+		include CONTROLLERS_URL . "manage_food_controller.php";
+		$manage_controller = new manage_food_controller();
+		$manage_controller->run_action($action, $id);
 
-		include CONTROLLERS_URL . "manage_controller.php";
-		$manage_controller = new manage_controller();
+	});
+
+	$router->get("manage/category/#id/#action", function ($id, $action) {
+		
+		include CONTROLLERS_URL . "manage_category_controller.php";
+		$manage_controller = new manage_category_controller();
+		$manage_controller->run_action($action, $id);
+
+	});
+
+	$router->get("manage/general", function () {
+		
+		include CONTROLLERS_URL . "manage_general_controller.php";
+		$manage_controller = new manage_general_controller();
 		$manage_controller->run_action();
 
 	});
@@ -171,12 +187,84 @@
 
 		include CONTROLLERS_URL . "login_controller.php";
 
-		$login_controller = new LoginController($data["username"], $data["pass"]);
-		$login_controller->login();
-		print_r($login_controller);
+		LoginController::login($data["username"], $data["pass"]);
 		exit();
 
 	});
+
+
+	$router->post("manage/food/#action", function ($post_data, $action) {
+
+		if ($action == "delete_food") {
+
+			if (is_numeric(intval($post_data["food_id"]))) {
+
+				include MODELS_URL . "manage.php";
+
+				$manage = new Manage($_SESSION["user"]->id);
+
+				$res = $manage->delete_food(intval($post_data["food_id"]));
+
+				echo json_encode($res);
+			}else {
+				echo json_encode(false);
+			}
+
+		}else if ($action == "update_food") {
+			
+			if (is_numeric(intval($post_data["id"]))) {
+				
+				include MODELS_URL . "manage.php";
+
+				$manage = new Manage($_SESSION["user"]->id);
+				$res = $manage->update_food($post_data, $_FILES);
+				echo json_encode($res);
+			}else {
+				echo json_encode(false);
+			}
+		}
+
+	});
+
+
+	$router->post("manage/category/#action", function ($post_data, $action) {
+
+		if (isset($post_data["id"]) && is_numeric(intval($post_data["id"]))) {
+			
+			include MODELS_URL . "manage.php";
+			$manage = new Manage($_SESSION["user"]->id);
+			
+			if ($action == "delete_category") {
+				$res = $manage->delete_category(intval($post_data["id"]));
+
+			}else if ($action == "update_category") {
+				$res = $manage->update_category($post_data, $_FILES);
+				
+			}else {
+				echo json_encode(false);
+				exit();
+			}
+
+			echo json_encode($res);
+			exit();
+			
+		}else {
+			echo json_encode(false);
+			exit();
+		}
+
+	});
+
+	$router->post("manage/general", function () {
+		
+		include CONTROLLERS_URL . "manage_general_controller.php";
+		$manage_controller = new manage_general_controller();
+		$manage_controller->run_action("update", $_POST, $_FILES);
+
+	});
+
+
+	$router->not_found();
 
 	// $admin_page  = [
 	// 	"dashboard",

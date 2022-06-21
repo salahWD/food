@@ -7,6 +7,10 @@
   define("MODELS_URL", dirname(__FILE__) . DIRECTORY_SEPARATOR . "models" . DIRECTORY_SEPARATOR );
   define("LAYOUT_URL", dirname(__FILE__) . DIRECTORY_SEPARATOR . "layout" . DIRECTORY_SEPARATOR);
   define("CSS_URL", "http://localhost" . DIRECTORY_SEPARATOR . "food" . DIRECTORY_SEPARATOR . "css"  . DIRECTORY_SEPARATOR);
+  define("IMAGES_URL", dirname(__FILE__) . DIRECTORY_SEPARATOR . "img" . DIRECTORY_SEPARATOR);
+  define("FOOD_IMAGES", dirname(__FILE__) . DIRECTORY_SEPARATOR . "img" . DIRECTORY_SEPARATOR . "foods" . DIRECTORY_SEPARATOR);
+  define("CATEGORIES_IMAGES", dirname(__FILE__) . DIRECTORY_SEPARATOR . "img" . DIRECTORY_SEPARATOR . "categories" . DIRECTORY_SEPARATOR);
+  define("LOGOS_IMAGES", dirname(__FILE__) . DIRECTORY_SEPARATOR . "img" . DIRECTORY_SEPARATOR . "logos" . DIRECTORY_SEPARATOR);
   
   /* DB Congif */
   

@@ -5,20 +5,28 @@
 	<script src="<?php echo Router::get_path("js");?>/functions.js"></script>
 	<script>
 		
+			// select image button
+			if (document.getElementById("update-img-btn")) {
+				let updateImgBtn 		= document.getElementById("update-img-btn");
+				let updateImginput 	= document.getElementById("update-img-input");
+				let previewImg 			= document.getElementById("img-preview");
+	
+				updateImgBtn.onclick = function () {
+					updateImginput.click();
+				}
+	
+				updateImginput.onchange = e => {
+					let [file] = updateImginput.files;
+					previewImg.src = URL.createObjectURL(file);
+				}
+			}
+
 		$(document).ready(function(){
 			
 			// chosing catigory
 			let cat = $("#category-selector");
 			cat.on('change', function() {
 				getCat(cat.val());
-			});
-
-			// select image button
-			let updateImgBtn 		= $("#update-img-btn");
-			let updateImginput 	= $("#update-img-input");
-
-			updateImgBtn.click(function () {
-				updateImginput.click();
 			});
 
 			// increase and decrease order count
@@ -103,7 +111,40 @@
 
 			$(document).ready(function(){
 
-				
+				/* === Delete Food / Manage Menu === */
+				$(".delete-btn").each(function (index) {
+					$(this).click(function () {
+						let id = $(this).parent().find(".id-value").val();
+						if ($(this).data("type") == "food") {
+							deleteFood(id);
+						}else {
+							deleteCategory(id, $(this));
+						}
+					});
+				});
+
+				/* === Send Form / Manage Menu === */
+				if ("#send-btn") {
+					$(window).keydown(function(event){
+						if(event.keyCode == 13) {// prevent [enter] to send the form
+							event.preventDefault();
+							return false;
+						}
+					});
+
+					$("#send-btn").click(function () {
+						let url = window.location.pathname.split("/");
+						let id = url[4];
+						if ($(this).data("type") == "food") {
+							updateFood(id);
+						}else if ($(this).data("type") == "category") {
+							updateCategory(id);
+						}else if ($(this).data("type") == "general") {
+							updateGeneral();
+						}
+					});
+					
+				}
 
 			});
 

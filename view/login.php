@@ -1,10 +1,14 @@
 <?php
   
-  if (isset($_SESSION["admin"]) && !empty($_SESSION["admin"])) {
+  if (isset($_SESSION["user"]) && !empty($_SESSION["user"])) {
     header("Location: " . M_URL . "dashboard");
     exit();
   }
-
+  if (isset($_SESSION["errors"]) && !empty($_SESSION["errors"]) && is_array($_SESSION["errors"]) && count($_SESSION["errors"]) > 0) {
+    $errors = $_SESSION["errors"];
+  }else {
+    $errors = [];
+  }
   ?>
   
   <div class="main">
@@ -19,9 +23,21 @@
               <div class="input-group">
                 <span class="fa fa-user"></span>
                 <input name="username" type="text" Placeholder="Username" required
-                  class="form-control <?php echo isset($_SESSION["error"]["username"]) ? "is-invalid": "";?>">
+                  class="form-control <?php echo isset($errors["username"]) || isset($errors["undefined"]) ? "is-invalid": "";?>"
+                <?php echo isset($_SESSION["login_username"]) ? "value=\"" . $_SESSION["login_username"] . "\"" : ""; ?>/>
                 <div class="invalid-feedback">
-                  <?php echo isset($_SESSION["error"]["username"]) ? $_SESSION["error"]["username"] : "";?>
+                  <?php
+                    
+                    if (isset($errors["username"]) && is_array($errors["username"]) && count($errors["username"]) > 0):
+                      foreach($errors["username"] as $error):
+                        echo $error . "<br>";
+                      endforeach;
+                    endif;
+                    if (isset($errors["undefined"])):
+                        echo $errors["undefined"] . "<br>";
+                    endif;
+
+                  ?>
                 </div>
               </div>
               <div class="input-group">
@@ -46,7 +62,10 @@
       </div>
     </div>
   </div>
-<?php //endif;?>
+<?php 
+  unset($_SESSION["errors"]);
+  unset($_SESSION["login_username"]);
+?>
 
 
 <!-- 

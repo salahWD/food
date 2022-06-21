@@ -4,6 +4,7 @@
   class Controller {
     
     public function run_action($action = "default", ...$args) {
+			
       $action .= "_action";
       if (method_exists($this, $action)) {
         $this->$action(...$args);
@@ -13,13 +14,13 @@
     protected function admin_check() {
 
       if (!isset($_SESSION["user"]) || empty($_SESSION["user"])) {
-        $temp = new Template(null, 2, true);
-        $temp->view("error_no_admin_login.php");
+        $temp = new Template("error", 2, true);
+        $temp->view("login_error.php");
         exit();
       }else {
 				if (get_class($_SESSION["user"]) != "User") {
-					$temp = new Template(null, 2, true);
-					$temp->view("error_no_admin_login.php");
+					$temp = new Template("error", 2, true);
+					$temp->view("login_error.php");
 				}
 			}
 
@@ -35,6 +36,7 @@
 		private $url;
 		private $id = NULL;
 		private $action = "default";
+		private $count = 1;
 
 		public function __construct($url) {
 
@@ -63,7 +65,7 @@
 					}
 				}
 				
-				$execution($_POST, $this->action);
+				$execution($_POST, $this->action, $_FILES);
 				exit();
 
 			}else {
@@ -75,7 +77,7 @@
 		public function get($page, $execution) {
 			
 			if ($_SERVER["REQUEST_METHOD"] == "GET") {
-
+				
 				$page = explode("/", $page);
 				$idi = array_search("#id", $page);// id index
 				$aci = array_search("#action", $page);// action index
@@ -90,18 +92,12 @@
 				
 				if ($aci) {
 					unset($page[$aci]);
-					if (isset($this->url[$idi])) {
+					if (isset($this->url[$aci])) {
 						$this->action = $this->url[$aci];
 						unset($this->url[$aci]);
 					}
 				}
-				
-				// echo $id;
-				// print_r($page);
-				// echo "<br>";
-				// print_r($this->url);
-				// echo "<br>";
-				// echo "<hr>";
+
 				foreach($page as $key => $attr) {// 0 = food, 1 = $id
 					if (!isset($this->url[$key]) || $this->url[$key] != $attr)  {
 						return false;
@@ -119,6 +115,11 @@
 
 		public static function get_path($page) {
 			return M_URL . $page;
+		}
+
+		public function not_found() {
+			$view = new Template("error", 2);
+			$view->view("404.php", null);
 		}
 
 	}
@@ -199,10 +200,6 @@
 		public $password;
 		private $db;
 
-		public function __construct($db) {
-			$this->db = $db;
-		}
-
 
 		public static function get_data($connection, $id) {
 
@@ -210,7 +207,7 @@
 			$sql->execute([$id]);
 
 			if ($sql->rowCount() > 0) {
-				$data = $sql->fetchObject("general", [NULL]);
+				$data = $sql->fetchObject("general");
 				$data->currency = self::get_currency($connection, $data->currency);
 				return $data;
 			}else {

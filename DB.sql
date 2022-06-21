@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 07, 2022 at 12:53 AM
+-- Generation Time: Jun 22, 2022 at 01:51 AM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 8.0.2
 
@@ -40,9 +40,9 @@ CREATE TABLE `categories` (
 --
 
 INSERT INTO `categories` (`id`, `name`, `description`, `image`, `restaurant_id`) VALUES
-(1, 'ITALIYAN', 'this is a list of italyan food', 'http://localhost/food/img/category/01.jpg', 1),
-(2, 'american', 'and this is an amercan food&#13;&#10;', 'http://localhost/food/img/category/02.jpg', 1),
-(4, 'americany', 'and this is an amercan food&#13;&#10;', 'http://localhost/food/img/category/03.jpg', 1);
+(2, 'american', 'and this is an amercan food\r\n', 'http://localhost\\food\\img\\categories\\rdj4dzdd16db2660.jpg', 1),
+(4, 'americany', 'and this is an amercan food&#13;&#10;', 'http://localhost/food/img/categories/03.jpg', 1),
+(13, 'ITALYAN', 'this is a italyan foods', 'http://localhost/food/img/categories/01.jpg', 1);
 
 -- --------------------------------------------------------
 
@@ -86,10 +86,11 @@ CREATE TABLE `foods` (
 --
 
 INSERT INTO `foods` (`id`, `name`, `price`, `description`, `image`, `category`) VALUES
-(1, 'Sed varius turpis', 45, 'Nam in suscipit nisi, sit amet consectetur metus. Ut sit amet tellus accumsan\r\n\r\n', 'http://192.168.1.108/food/img/gallery/01.jpg', 1),
-(2, 'Fusce dictum finibus', 60, 'Nam in suscipit nisi, sit amet consectetur metus. Ut sit amet tellus accumsan\r\n\r\n', 'http://192.168.1.108/food/img/gallery/02.jpg', 1),
-(3, 'Aliquam sagittis\r\n', 22, 'Nam in suscipit nisi, sit amet consectetur metus. Ut sit amet tellus accumsan\r\n\r\n', 'http://192.168.1.108/food/img/gallery/03.jpg', 2),
-(4, 'Quisque et felis eros\r\n', 12, 'Nam in suscipit nisi, sit amet consectetur metus. Ut sit amet tellus accumsan\r\n\r\n', 'http://192.168.1.108/food/img/gallery/04.jpg', 4);
+(3, 'Aliquam sagittis', 22, 'Nam in suscipit nisi, sit amet consectetur metus. Ut sit amet tellus accumsan\r\n\r\n', 'http://localhost\\food\\img\\foods\\rdj4fdefe20fdc47.jpg', 2),
+(4, 'Quisque et felis eros\r\n', 12, 'Nam in suscipit nisi, sit amet consectetur metus. Ut sit amet tellus accumsan\r\n\r\n', 'http://localhost/food/img/foods/04.jpg', 4),
+(8, 'Pot Appetizers', 45, 'The best part about the Instant Pot is that it\'s basically foolproof. Drop in the ingredients, ', 'http://localhost\\food\\img/foods/rdj3cxb4c1421771.jpg', 13),
+(9, 'Veggie Sandwich', 55, 'Listen I love sandwiches, especially those that have meat in them (see my obsession with the iconic', 'http://localhost\\food\\img/foods/rdj3d4bfc093510a.jpg', 4),
+(10, 'Pancakes', 25, 'type of candies but it is very good and had a 5 start as a rate from USF', 'http://localhost\\food\\img/foods/rdj3db8bffc7f62b.jpeg', 13);
 
 -- --------------------------------------------------------
 
@@ -99,22 +100,21 @@ INSERT INTO `foods` (`id`, `name`, `price`, `description`, `image`, `category`) 
 
 CREATE TABLE `general` (
   `id` int(11) NOT NULL,
+  `logo` varchar(255) NOT NULL DEFAULT 'default.jpg',
   `name` varchar(255) NOT NULL,
   `number` varchar(255) NOT NULL,
   `whatsapp` varchar(255) NOT NULL,
   `order_msg` varchar(255) NOT NULL,
   `address` varchar(255) NOT NULL,
-  `currency` int(11) NOT NULL,
-  `username` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL
+  `currency` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `general`
 --
 
-INSERT INTO `general` (`id`, `name`, `number`, `whatsapp`, `order_msg`, `address`, `currency`, `username`, `password`) VALUES
-(1, 'My Restaurant', '009055271885', '009055271885', 'hey! i like to order ( ## ) wich cost foodprice how much time will it take?', 'esenyurt meydan', 2, 'admin', '40bd001563085fc35165329ea1ff5c5ecbdbbeef');
+INSERT INTO `general` (`id`, `logo`, `name`, `number`, `whatsapp`, `order_msg`, `address`, `currency`) VALUES
+(1, 'http://localhost\\food\\img\\logos\\rduq4i854ff75231.png', 'My Restaurant', '009055271885', '009055271885', 'hey! i like to order ( ## ) wich cost foodprice how much time will it take?', 'esenyurt meydan', 2);
 
 -- --------------------------------------------------------
 
@@ -184,7 +184,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `currencies`
@@ -196,7 +196,7 @@ ALTER TABLE `currencies`
 -- AUTO_INCREMENT for table `foods`
 --
 ALTER TABLE `foods`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `general`

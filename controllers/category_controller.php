@@ -4,25 +4,20 @@ class CategoryController extends Controller {
 
   public function default_action() {
     
-     /* Initial Objects And Connection */
-      
-      $con = DBC::get_instance();
-      $category = new Category($con->dbh);
-
      /* Getting Data */
-      $view_data["categories"] = $category->get_all(1);
+      $view_data["categories"] = Category::get_all(1);
 
      /* Initial View */
-      $template = new Template();
-      $template->view("category/get.php", $view_data);
+      $template = new Template("manage-category.css");
+      $template->view("category/get-all.php", $view_data);
 
   }
 
   public function get_category_action($cat_id) {
 
      /* Initial Objects And Connection */
-      $con = DBC::get_instance();
-      $category = new Category($con->dbh);
+      
+      $category = new Category();
       
      /* Getting Data */
       $view_data["foods"] = $category->get_foods($cat_id);

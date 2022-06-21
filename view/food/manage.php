@@ -1,21 +1,30 @@
 <div class="container">
-  <div class="row mt-4">
-    <?php foreach ($foods as $food):?>
-      <article class="col-lg-3 col-md-4 col-sm-6 col-12 tm-gallery-item">
-        <figure>
-          <img src="<?php echo $food->image;?>" alt="Image" class="img-fluid tm-gallery-img">
-          <figcaption>
-            <h4 class="tm-gallery-title"><a href="<?php echo M_URL . "food/" . $food->id;?>"><?php echo $food->name;?></a></h4>
-            <p class="tm-gallery-description"><?php echo $food->description;?></p>
-            <p class="tm-gallery-price"><?php echo $food->price;?> <small><?php echo $currency;?></small></p>
-          </figcaption>
-        </figure>
-        <div class="border btns-holder d-flex justify-content-around p-2 rounded">
-          <input type="hidden" class="food-id" value="<?php echo $food->id;?>">
-          <button class="btn btn-primary edit-btn"><i class="fa fa-edit"></i></button>
-          <button class="btn btn-danger delete-btn"><i class="fa fa-trash"></i></button>
-        </div>
-      </article>
-    <?php endforeach;?>
+  <div class="row justify-content-center mt-5">
+    <form class="col-9" id="form">
+
+      <div class="text-center mb-4">
+        <img style="max-width:255px;max-height:255px;width:255px;height:255px;" id="img-preview" src="<?php echo $food->image;?>" alt="food image" class="img-fluid img-thumbnail m-auto">
+        <button type="button" id="update-img-btn" class="btn btn-success edit-btn"><i class="fa fa-edit"></i></button>
+        <input type="file" name="image" id="update-img-input" class="hidden">
+      </div>
+
+      <div class="col form-outline mb-4">
+        <label class="form-label" for="foodname">name</label>
+        <input type="text" id="foodname" class="form-control" value="<?php echo $food->name;?>" />
+      </div>
+  
+      <div class="col form-outline mb-4">
+        <label class="form-label" for="price">Price</label>
+        <input type="number" id="price" class="form-control" value="<?php echo $food->price;?>" />
+      </div>
+  
+      <div class="col form-outline mb-4">
+        <label class="form-label" for="description">Description</label>
+        <textarea class="form-control" id="description" rows="4"><?php echo $food->description;?></textarea>
+      </div>
+  
+      <button id="send-btn" data-form="#form" data-type="food" type="button" class="col btn btn-primary btn-block mb-4"><i class="fas fa-save"></i> save</button>
+    </form>
   </div>
+
 </div>

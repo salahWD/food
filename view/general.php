@@ -1,40 +1,7 @@
-<?php
-
-  if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-    foreach ($_POST as $k => $v) {
-      $_POST[$k] = trim($v);
-    }
-
-    $phone    = validate("phone", FILTER_SANITIZE_NUMBER_INT);
-    $whatsapp = validate("whatsapp", FILTER_SANITIZE_NUMBER_INT);
-    $address  = validate("address", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    $O_msg    = validate("msg", FILTER_SANITIZE_SPECIAL_CHARS);
-    $currency = isset($_POST["currency"]) && is_numeric($_POST["currency"]) ? intval($_POST["currency"]) : 1;
-
-    $update = $db->update('general',
-    [
-      'number'    => $phone,
-      'whatsapp'  => $whatsapp,
-      'address'	  => $address,
-      'order_msg'	  => $O_msg,
-      'currency'	=> $currency
-    ], 1);// update general table where id = 1
-
-    header("Location: " . M_PATH . "general");
-    exit();
-
-  }
-
-  $configration = $db->table("general")->get()[0];
-  $currencies   = $db->table("currencies")->get();
-
-?>
-
 <div class="container pt-5">
   <div class="text-center mb-4">
     <div class="img-container">
-      <img src="https://via.placeholder.com/120/09f/fff" alt="logo" class="img-fluid img-thumbnail rounded-circle mb-4">
+      <img style="max-width: 120px;" src="<?php echo $configration->logo ?? "https://via.placeholder.com/120/09f/fff";?>" alt="logo" class="img-fluid img-thumbnail rounded-circle mb-4">
       <div class="edit-container">
         <button id="update-img-btn" class="edit-img-btn img-thumbnail"><i class="fa-solid fa-camera"></i></button>
       </div>
@@ -44,8 +11,8 @@
   <div class="card info-container text-center">
     <div class="card-body">
       <p class="card-text text-dark mb-4">you can edit your information from here.</p>
-      <form class="form" method="POST" action="<?php echo M_PATH . "general";?>" enctype="multipart/form-data">
-        <input class="hidden" type="file" name="logo" id="update-img-input">
+      <form class="form" method="POST" action="<?php echo M_PATH . "manage/general";?>" enctype="multipart/form-data">
+        <input class="hidden" type="file" name="image" id="update-img-input">
         <div class="form-group">
           <label for="phone">Phone number</label>
           <input
@@ -94,7 +61,7 @@
             <?php endforeach;?>
           </select>
         </div>
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button data-type="general" type="button" id="send-btn" class="btn btn-primary">Save</button>
       </form>
     </div>
   </div>
