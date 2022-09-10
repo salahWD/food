@@ -1,0 +1,32 @@
+==============  Cart  ==============
+
+1- initial a cart Object:
+
+    if cart coockie is set
+
+        * check if it's class is named "Cart"
+        * unserialize the coockie data
+        * return (Cart object) with saved (Cart coockie) data
+
+    else
+
+        * return empty cart object
+
+2- save Cart Object in the sesison ( $_SESSION[Cart] )
+
+3- add order:
+
+    if (order id) have been ordered before
+
+      * sum (new order count) to (ordered food count) <=> (2 pizza before + 1 pizza now)
+
+    else
+
+    add order directly
+
+
+==============  Routing  ==============
+
+==============  Template  ==============
+
+==============  User Session  ==============

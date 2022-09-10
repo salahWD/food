@@ -1,11 +1,11 @@
 <?php
 
-  define("M_URL", "http://localhost" . DIRECTORY_SEPARATOR . "food" . DIRECTORY_SEPARATOR);
+  define("M_URL", "http://food.test" . DIRECTORY_SEPARATOR);
   define("M_PATH", dirname(__FILE__) . DIRECTORY_SEPARATOR);
-  define("VIEWS_URL", dirname(__FILE__) . DIRECTORY_SEPARATOR . "view" . DIRECTORY_SEPARATOR );
   define("CONTROLLERS_URL", dirname(__FILE__) . DIRECTORY_SEPARATOR . "controllers" . DIRECTORY_SEPARATOR );
   define("MODELS_URL", dirname(__FILE__) . DIRECTORY_SEPARATOR . "models" . DIRECTORY_SEPARATOR );
-  define("LAYOUT_URL", dirname(__FILE__) . DIRECTORY_SEPARATOR . "layout" . DIRECTORY_SEPARATOR);
+  define("LAYOUT_PATH", dirname(__FILE__) . DIRECTORY_SEPARATOR . "layout" . DIRECTORY_SEPARATOR);
+  define("VIEW_PATH", dirname(__FILE__) . DIRECTORY_SEPARATOR . "views" . DIRECTORY_SEPARATOR);
   define("CSS_URL", "http://localhost" . DIRECTORY_SEPARATOR . "food" . DIRECTORY_SEPARATOR . "css"  . DIRECTORY_SEPARATOR);
   define("IMAGES_URL", dirname(__FILE__) . DIRECTORY_SEPARATOR . "img" . DIRECTORY_SEPARATOR);
   define("FOOD_IMAGES", dirname(__FILE__) . DIRECTORY_SEPARATOR . "img" . DIRECTORY_SEPARATOR . "foods" . DIRECTORY_SEPARATOR);

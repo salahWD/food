@@ -11,7 +11,7 @@
   <div class="card info-container text-center">
     <div class="card-body">
       <p class="card-text text-dark mb-4">you can edit your information from here.</p>
-      <form class="form" method="POST" action="<?php echo M_PATH . "manage/general";?>" enctype="multipart/form-data">
+      <form class="form" method="POST" action="<?php echo M_PATH . "manage/Restaurants";?>" enctype="multipart/form-data">
         <input class="hidden" type="file" name="image" id="update-img-input">
         <div class="form-group">
           <label for="phone">Phone number</label>
@@ -61,7 +61,7 @@
             <?php endforeach;?>
           </select>
         </div>
-        <button data-type="general" type="button" id="send-btn" class="btn btn-primary">Save</button>
+        <button data-type="Restaurants" type="button" id="send-btn" class="btn btn-primary">Save</button>
       </form>
     </div>
   </div>

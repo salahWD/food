@@ -72,7 +72,7 @@
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST"):
-    $configration = $db->table("general")->select("id, name, password, username")->get()[0];
+    $configration = $db->table("Restaurants")->select("id, name, password, username")->get()[0];
     $error = [];
     if (isset($_POST["username"]) && !empty($_POST["username"])) {
       if (isset($_POST["pass"]) && !empty($_POST["pass"])) {

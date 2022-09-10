@@ -14,7 +14,7 @@ class LoginController extends Controller {
       exit();
     }else {
       $template = new Template("login", 2);// 2 to include login page without header and footer
-      $template->view("login.php");
+      $template->view("login");
     }
 
   }

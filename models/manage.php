@@ -20,13 +20,13 @@ class Manage {
     }
   }
 
-  public function get_general() {
+  public function get_Restaurants() {
 
     $db = DBC::get_instance();
 
     $sql = $db->dbh->prepare(
-      "SELECT * FROM general
-      INNER JOIN users ON users.restaurant_id = general.id
+      "SELECT * FROM Restaurants
+      INNER JOIN users ON users.restaurant_id = Restaurants.id
       WHERE users.id = ?");
 		$sql->execute([$this->admin_id]);
 
@@ -40,13 +40,13 @@ class Manage {
 
   }
 
-  public function select_general($selector) {
+  public function select_Restaurants($selector) {
 
     $db = DBC::get_instance();
 
     $sql = $db->dbh->prepare(
-      "SELECT general.$selector FROM general
-      INNER JOIN users ON users.restaurant_id = general.id
+      "SELECT Restaurants.$selector FROM Restaurants
+      INNER JOIN users ON users.restaurant_id = Restaurants.id
       WHERE users.id = ?");
 		$sql->execute([$this->admin_id]);
 
@@ -67,8 +67,8 @@ class Manage {
 
     $sql = $db->prepare(
       "SELECT foods.* FROM users
-      INNER JOIN general ON general.id = users.restaurant_id
-      INNER JOIN categories ON categories.restaurant_id = general.id
+      INNER JOIN Restaurants ON Restaurants.id = users.restaurant_id
+      INNER JOIN categories ON categories.restaurant_id = Restaurants.id
       INNER JOIN foods ON foods.category = categories.id
       WHERE users.id = ?");
 
@@ -89,8 +89,8 @@ class Manage {
 
     $sql = $db->prepare(
       "SELECT categories.* FROM users
-      INNER JOIN general ON general.id = users.restaurant_id
-      INNER JOIN categories ON categories.restaurant_id = general.id
+      INNER JOIN Restaurants ON Restaurants.id = users.restaurant_id
+      INNER JOIN categories ON categories.restaurant_id = Restaurants.id
       WHERE users.id = ?");
 
     $sql->execute([$this->admin_id]);
@@ -111,8 +111,8 @@ class Manage {
 
     $sql = $db->prepare(
       "SELECT currencies.* FROM users
-      INNER JOIN general ON general.id = users.restaurant_id
-      INNER JOIN currencies ON currencies.id = general.currency
+      INNER JOIN Restaurants ON Restaurants.id = users.restaurant_id
+      INNER JOIN currencies ON currencies.id = Restaurants.currency
       WHERE users.id = ?");
 
     $sql->execute([$this->admin_id]);
@@ -298,11 +298,11 @@ class Manage {
 
   }
 
-  public function update_general($id, $data, $files) {
+  public function update_Restaurants($id, $data, $files) {
 
     if (!empty($data)) {
 
-      $restaurant_id = $this->select_general("id");
+      $restaurant_id = $this->select_Restaurants("id");
 
       $check_array = ["phone", "whatsapp", "msg", "address", "currency"];
       foreach($check_array as $check) {
@@ -331,14 +331,14 @@ class Manage {
       $image_name = $this->upload_img($img, LOGOS_IMAGES);
 
       if ($image_name) {
-        $query = "UPDATE `general` SET `number` = ?, whatsapp = ?, order_msg = ?, `address` = ?, `currency` = ?, logo = ? WHERE id = ?";
+        $query = "UPDATE `Restaurants` SET `number` = ?, whatsapp = ?, order_msg = ?, `address` = ?, `currency` = ?, logo = ? WHERE id = ?";
         $execute = [$data["phone"], $data["whatsapp"], $data["msg"], $data["address"], $data["currency"], $image_name, $id];
       }else {
         return ["success" => false, "error" => "error uploading the image!"];
       }
     }else {
       // update data without updating the image
-      $query = "UPDATE `general` SET `number` = ?, whatsapp = ?, order_msg = ?, `address` = ?, `currency` = ? WHERE id = ?";
+      $query = "UPDATE `Restaurants` SET `number` = ?, whatsapp = ?, order_msg = ?, `address` = ?, `currency` = ? WHERE id = ?";
       $execute = [$data["phone"], $data["whatsapp"], $data["msg"], $data["address"], $data["currency"], $id];
     }
     
@@ -354,7 +354,7 @@ class Manage {
 
   }
 
-  // public function get_general($id) {
+  // public function get_Restaurants($id) {
 
   //   if (!empty($data)) {
   //     $check_array = ["id", "name", "description"];

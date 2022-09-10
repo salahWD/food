@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 22, 2022 at 01:51 AM
+-- Generation Time: Sep 10, 2022 at 03:25 PM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 8.0.2
 
@@ -32,14 +32,14 @@ CREATE TABLE `categories` (
   `name` varchar(255) NOT NULL,
   `description` text NOT NULL,
   `image` varchar(255) NOT NULL,
-  `restaurant_id` int(11) NOT NULL
+  `menu` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `categories`
 --
 
-INSERT INTO `categories` (`id`, `name`, `description`, `image`, `restaurant_id`) VALUES
+INSERT INTO `categories` (`id`, `name`, `description`, `image`, `menu`) VALUES
 (2, 'american', 'and this is an amercan food\r\n', 'http://localhost\\food\\img\\categories\\rdj4dzdd16db2660.jpg', 1),
 (4, 'americany', 'and this is an amercan food&#13;&#10;', 'http://localhost/food/img/categories/03.jpg', 1),
 (13, 'ITALYAN', 'this is a italyan foods', 'http://localhost/food/img/categories/01.jpg', 1);
@@ -95,13 +95,34 @@ INSERT INTO `foods` (`id`, `name`, `price`, `description`, `image`, `category`) 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `general`
+-- Table structure for table `menus`
 --
 
-CREATE TABLE `general` (
+CREATE TABLE `menus` (
+  `id` int(11) NOT NULL,
+  `image` varchar(255) NOT NULL,
+  `color` varchar(255) NOT NULL,
+  `restaurant` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `menus`
+--
+
+INSERT INTO `menus` (`id`, `image`, `color`, `restaurant`) VALUES
+(1, 'sanabel main menu', '#ddd', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `restaurants`
+--
+
+CREATE TABLE `restaurants` (
   `id` int(11) NOT NULL,
   `logo` varchar(255) NOT NULL DEFAULT 'default.jpg',
   `name` varchar(255) NOT NULL,
+  `url_name` varchar(255) NOT NULL,
   `number` varchar(255) NOT NULL,
   `whatsapp` varchar(255) NOT NULL,
   `order_msg` varchar(255) NOT NULL,
@@ -110,11 +131,11 @@ CREATE TABLE `general` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `general`
+-- Dumping data for table `restaurants`
 --
 
-INSERT INTO `general` (`id`, `logo`, `name`, `number`, `whatsapp`, `order_msg`, `address`, `currency`) VALUES
-(1, 'http://localhost\\food\\img\\logos\\rduq4i854ff75231.png', 'My Restaurant', '009055271885', '009055271885', 'hey! i like to order ( ## ) wich cost foodprice how much time will it take?', 'esenyurt meydan', 2);
+INSERT INTO `restaurants` (`id`, `logo`, `name`, `url_name`, `number`, `whatsapp`, `order_msg`, `address`, `currency`) VALUES
+(1, 'http://localhost\\food\\img\\logos\\rduq4i854ff75231.png', 'sanabel', 'sanabel', '009055271885', '009055271885', 'hey! i like to order ( ## ) wich cost foodprice how much time will it take?', 'esenyurt meydan', 2);
 
 -- --------------------------------------------------------
 
@@ -148,7 +169,7 @@ INSERT INTO `users` (`id`, `username`, `password`, `permission`, `restaurant_id`
 ALTER TABLE `categories`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `name` (`name`),
-  ADD KEY `restaurant_general` (`restaurant_id`);
+  ADD KEY `menu_category` (`menu`);
 
 --
 -- Indexes for table `currencies`
@@ -164,10 +185,17 @@ ALTER TABLE `foods`
   ADD KEY `category_food` (`category`);
 
 --
--- Indexes for table `general`
+-- Indexes for table `menus`
 --
-ALTER TABLE `general`
+ALTER TABLE `menus`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `restaurants`
+--
+ALTER TABLE `restaurants`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `url_name` (`url_name`);
 
 --
 -- Indexes for table `users`
@@ -199,9 +227,15 @@ ALTER TABLE `foods`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- AUTO_INCREMENT for table `general`
+-- AUTO_INCREMENT for table `menus`
 --
-ALTER TABLE `general`
+ALTER TABLE `menus`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `restaurants`
+--
+ALTER TABLE `restaurants`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
@@ -218,7 +252,7 @@ ALTER TABLE `users`
 -- Constraints for table `categories`
 --
 ALTER TABLE `categories`
-  ADD CONSTRAINT `restaurant_general` FOREIGN KEY (`restaurant_id`) REFERENCES `general` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `menu_category` FOREIGN KEY (`menu`) REFERENCES `menus` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `foods`
@@ -227,16 +261,16 @@ ALTER TABLE `foods`
   ADD CONSTRAINT `category_food` FOREIGN KEY (`category`) REFERENCES `categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `general`
+-- Constraints for table `menus`
 --
-ALTER TABLE `general`
-  ADD CONSTRAINT `currency_website` FOREIGN KEY (`currency`) REFERENCES `currencies` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `menus`
+  ADD CONSTRAINT `menus_ibfk_1` FOREIGN KEY (`id`) REFERENCES `restaurants` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `users`
 --
 ALTER TABLE `users`
-  ADD CONSTRAINT `restaurant_users` FOREIGN KEY (`restaurant_id`) REFERENCES `general` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `restaurant_users` FOREIGN KEY (`restaurant_id`) REFERENCES `restaurants` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

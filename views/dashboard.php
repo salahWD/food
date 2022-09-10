@@ -27,10 +27,10 @@
     <div class="col-md-4">
       <div class="card">
         <div class="card-body text-center">
-          <h5 class="card-title">general info</h5>
+          <h5 class="card-title">Restaurants info</h5>
           <hr>
-          <p class="card-text">to edit teasturant's general info</p>
-          <a href="<?php echo Router::get_path("manage/general");?>" class="btn btn-primary mt-3"><i class="fa-regular fa-pen-to-square"></i></a>
+          <p class="card-text">to edit teasturant's Restaurants info</p>
+          <a href="<?php echo Router::get_path("manage/Restaurants");?>" class="btn btn-primary mt-3"><i class="fa-regular fa-pen-to-square"></i></a>
         </div>
       </div>
     </div>

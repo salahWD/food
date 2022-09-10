@@ -11,12 +11,12 @@ class manage_food_controller extends controller {
 
     $view_data["foods"] = $manage->get_permitted_foods();
 
-    $view_data["general"] = $manage->select_general("name");// [header] requires it
+    $view_data["Restaurants"] = $manage->select_Restaurants("name");// [header] requires it
     $currency = $manage->get_currency();
     $view_data["currency"] = $currency->icon;
     
     $template = new Template(null, 3, true);
-    $template->view("food/manage-all.php", $view_data);
+    $template->view("food/manage-all", $view_data);
 
   }
 
@@ -29,7 +29,7 @@ class manage_food_controller extends controller {
       $manage = new Manage($_SESSION["user"]->id);
   
       /* === Header Requires === */
-      $view_data["general"] = $manage->select_general("name");
+      $view_data["Restaurants"] = $manage->select_Restaurants("name");
       
       /* === Page Data === */
       $view_data["food"] = $manage->manage_food($id);
@@ -38,7 +38,7 @@ class manage_food_controller extends controller {
       
       /* === Page Show === */
       $template = new Template(null, 3, true);
-      $template->view("food/manage.php", $view_data);
+      $template->view("food/manage", $view_data);
 
     }else {
       echo "Error";

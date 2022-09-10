@@ -11,10 +11,10 @@ class manage_category_controller extends controller {
 
     $view_data["categories"] = $manage->get_permitted_categories();
 
-    $view_data["general"] = $manage->select_general("name");// [header] requires it
+    $view_data["Restaurants"] = $manage->select_Restaurants("name");// [header] requires it
     
     $template = new Template(null, 3, true);
-    $template->view("category/manage-all.php", $view_data);
+    $template->view("category/manage-all", $view_data);
 
   }
 
@@ -27,7 +27,7 @@ class manage_category_controller extends controller {
       $manage = new Manage($_SESSION["user"]->id);
   
       /* === Header Requires === */
-      $view_data["general"] = $manage->select_general("name");
+      $view_data["Restaurants"] = $manage->select_Restaurants("name");
       
       /* === Page Data === */
       $view_data["category"] = $manage->manage_caterogy($id);
@@ -36,7 +36,7 @@ class manage_category_controller extends controller {
       
       /* === Page Show === */
       $template = new Template(null, 3, true);
-      $template->view("category/manage.php", $view_data);
+      $template->view("category/manage", $view_data);
 
     }else {
       echo "Error: page id is not valid!";

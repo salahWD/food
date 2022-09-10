@@ -9,7 +9,7 @@ class CategoryController extends Controller {
 
      /* Initial View */
       $template = new Template("manage-category.css");
-      $template->view("category/get-all.php", $view_data);
+      $template->view("category/get-all", $view_data);
 
   }
 
@@ -22,17 +22,17 @@ class CategoryController extends Controller {
      /* Getting Data */
       $view_data["foods"] = $category->get_foods($cat_id);
       $count = count($view_data["foods"]);
-      $view_data["currency"] = $_SESSION["general"]->currency;
+      $view_data["currency"] = $_SESSION["Restaurant"]->currency;
 
      /* Including The Page Requirments */
     
       $template = new Template();
       
       if ($count != NULL && $count > 0) {
-        $template->view("food/getall.php", $view_data);
+        $template->view("food/getall", $view_data);
       }else {
         $view_data["error_msg"] = "this category is not avalible!";
-        $template->view("error.php", $view_data);
+        $template->view("error", $view_data);
       }
 
   }

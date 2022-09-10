@@ -1,6 +1,6 @@
 <?php
 
-class manage_general_controller extends controller {
+class manage_Restaurants_controller extends controller {
   
   public function default_action() {// manage all foods
 
@@ -9,13 +9,13 @@ class manage_general_controller extends controller {
     include MODELS_URL . "manage.php";
     $manage = new Manage($_SESSION["user"]->id);
 
-    $result["general"] = $manage->select_general("name");
+    $result["Restaurants"] = $manage->select_Restaurants("name");
 
-    $result["configration"] = $manage->get_general();
+    $result["configration"] = $manage->get_Restaurants();
     $result["currencies"] = $manage->get_currencies();
 
     $template = new Template("", 3, true);
-    $template->view("general.php", $result);
+    $template->view("restaurants", $result);
 
   }
 
@@ -29,7 +29,7 @@ class manage_general_controller extends controller {
       include MODELS_URL . "manage.php";
       $manage = new Manage($id);
   
-      $res = $manage->update_general($id, $data, $files);
+      $res = $manage->update_Restaurants($id, $data, $files);
       echo json_encode($res);
       
     }else {

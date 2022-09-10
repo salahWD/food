@@ -20,10 +20,10 @@ class dashboard_controller extends controller {
 		
 		if ($manage->has_restaurant()) {
 			
-			$name = $manage->select_general("name");
-			$view_data["general"] = $name;
+			$name = $manage->select_Restaurants("name");
+			$view_data["Restaurants"] = $name;
 			$template = new Template(null, 3, true);
-			$template->view("dashboard.php", $view_data);
+			$template->view("dashboard", $view_data);
 			
 		}else {
 			echo "There is No Restaurant To Be Managed For You! From Index.php";

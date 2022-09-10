@@ -1,6 +1,6 @@
 <?php
 	
-	/* Include General Files */
+	/* Include Restaurants Files */
 
 	include "config.php";
 	include "class.php";
@@ -9,27 +9,17 @@
 
 	/* Starting The Session */
 	session_start();
+
 	/* Initial The Cart */
 	$cart = new Cart();
 	$_SESSION["cart"] = $cart;
-
-	/* Splitting Get Request Into Array For Better URL */
-	if (isset($_GET["url"]) && !empty($_GET["url"])) {
-
-		$get_arguments = rtrim($_GET["url"], '/');
-
-		$URL = explode('/', $get_arguments);
-	}else {
-		$URL[0] = "home";
-	}
-
-
+	
 	/* Routing And Handling Requests */
-	$router = new Router($URL);
+	$router = new Router();
 
 	###### Get Requests ######
 
-	$router->get("login", function () {
+	$router->get("/login", function () {
 		
 		include CONTROLLERS_URL . "login_controller.php";
 	
@@ -37,7 +27,7 @@
 		$login_controller->run_action();
 	});
 	
-	$router->get("home", function () {
+	$router->get("/", function () {
 		// creatting a controller
 		include CONTROLLERS_URL . "home_controller.php";
 		$home_controller = new HomeController();
@@ -45,17 +35,17 @@
 		
 	});
 
-	$router->get("cart", function () {
+	$router->get("/cart", function () {
 
 		$view_data["foods"] 			= $_SESSION["cart"]->get_view_data();
 		$view_data["total_price"] = $_SESSION["cart"]->calculate_total();
-		$view_data["currency"] 		= $_SESSION["general"]->currency;
+		$view_data["currency"] 		= $_SESSION["restaurant"]->currency;
 		$template = new Template();
-		$template->view("cart.php", $view_data);
+		$template->view("cart", $view_data);
 
 	});
 	
-	$router->get("logout", function () {
+	$router->get("/logout", function () {
 
 		// clear session and logout
 		session_unset();
@@ -67,21 +57,7 @@
 
 	});
 
-	$router->get("data/category/#id", function ($id = NULL) {
-		
-		// proccessing the info and login
-		$db = DB::getInstance();
-		
-		if ($id != NULL) {
-			$data = $db->table("foods")->where("category", $id)->get()->toJson();
-		}else {
-			$data = $db->table("foods")->get()->toJson();
-		}
-		echo $data;
-
-	});
-
-	$router->get("category/#id", function ($id = NULL) {
+	$router->get("/category/{id}", function ($id = NULL) {
 		
 		// creatting a controller
 		include MODELS_URL . "category.php";
@@ -96,22 +72,20 @@
 		
 	});
 
-	$router->get("food/#id", function ($id) {
-		
-		// creatting a controller
-		include CONTROLLERS_URL . "home_controller.php";
-		$home_controller = new HomeController();
-
-		if ($id != NULL) {
-			$home_controller->get_food($id);
-		}else {
-			header("Location: " . M_URL . "home");
-			exit();
-		}
+	$router->get("/food/{id}", function ($params) {
+		include CONTROLLERS_URL . "food_controller.php";
+		$C = new FoodController();
+		$id = $params["id"];
+		// if ($id != NULL) {
+			$C->run_action("default", $params["id"]);
+		// }else {
+		// 	header("Location: " . M_URL);
+		// 	exit();
+		// }
 		
 	});
 
-	$router->get("manage/food/#id/#action", function ($id, $action) {
+	$router->get("/manage/food/{id}/{param}", function ($id, $action) {
 		
 		include CONTROLLERS_URL . "manage_food_controller.php";
 		$manage_controller = new manage_food_controller();
@@ -119,7 +93,7 @@
 
 	});
 
-	$router->get("manage/category/#id/#action", function ($id, $action) {
+	$router->get("/manage/category/{id}/{param}", function ($id, $action) {
 		
 		include CONTROLLERS_URL . "manage_category_controller.php";
 		$manage_controller = new manage_category_controller();
@@ -127,63 +101,26 @@
 
 	});
 
-	$router->get("manage/general", function () {
+	$router->get("/manage/Restaurants", function () {
 		
-		include CONTROLLERS_URL . "manage_general_controller.php";
-		$manage_controller = new manage_general_controller();
+		include CONTROLLERS_URL . "manage_Restaurants_controller.php";
+		$manage_controller = new manage_Restaurants_controller();
 		$manage_controller->run_action();
 
 	});
 
-	$router->get("dashboard", function () {
+	$router->get("/dashboard", function () {
 
 		include CONTROLLERS_URL . "dashboard_controller.php";
 		$dashboard_controller = new dashboard_controller();
 		$dashboard_controller->run_action();
 
 	});
-	
+
 
 	######  POST Requests  ######
 
-	$router->post("data/cart/#action", function ($post_data, $action) {
-
-		if ($action == "default") {
-			$result = $_SESSION["cart"]->add_order($post_data["id"], intval($post_data["count"]));
-			$_SESSION["cart"]->set_cookie();
-			
-			echo json_encode($result);
-			
-		}elseif ($action == "confirm") {
-
-			$result = $_SESSION["cart"]->pay_cart($_SESSION["general"]->order_msg);
-			$_SESSION["cart"]->set_cookie();
-			echo json_encode(["whatsapp" => $_SESSION["general"]->whatsapp, "msg" => $result]);
-
-		}elseif ($action == "update") {
-			
-			$result = $_SESSION["cart"]->update_food_count($post_data["id"], $post_data["new_count"]);
-			$_SESSION["cart"]->set_cookie();
-
-			echo json_encode(["total_price" => $_SESSION["cart"]->calculate_total()]);
-
-		}elseif ($action == "deleteorder") {
-			
-			$result = $_SESSION["cart"]->delete_order($post_data["id"]);
-			$_SESSION["cart"]->set_cookie();
-			echo json_encode($result);
-		}elseif ($action == "delete") {
-			
-			$result = $_SESSION["cart"]->clear_cart();
-			$_SESSION["cart"]->set_cookie();
-			echo json_encode(["total_price" => $_SESSION["cart"]->calculate_total()]);
-
-		}
-		
-		exit();
-	});
-
-	$router->post("login", function ($data) {
+	$router->post("/login", function ($data) {
 
 		include CONTROLLERS_URL . "login_controller.php";
 
@@ -193,7 +130,7 @@
 	});
 
 
-	$router->post("manage/food/#action", function ($post_data, $action) {
+	$router->post("/manage/food/{param}", function ($post_data, $action) {
 
 		if ($action == "delete_food") {
 
@@ -227,7 +164,7 @@
 	});
 
 
-	$router->post("manage/category/#action", function ($post_data, $action) {
+	$router->post("/manage/category/{param}", function ($post_data, $action) {
 
 		if (isset($post_data["id"]) && is_numeric(intval($post_data["id"]))) {
 			
@@ -255,20 +192,95 @@
 
 	});
 
-	$router->post("manage/general", function () {
+	$router->post("/manage/restaurants", function () {
 		
-		include CONTROLLERS_URL . "manage_general_controller.php";
-		$manage_controller = new manage_general_controller();
+		include CONTROLLERS_URL . "manage_Restaurants_controller.php";
+		$manage_controller = new manage_Restaurants_controller();
 		$manage_controller->run_action("update", $_POST, $_FILES);
 
 	});
 
 
-	$router->not_found();
+	$router->add_404(function() {
+		echo "<h1>404</h1>";
+	});
+
+
+	######  API Requests  ######
+
+
+	// $router->post("api/cart/{param}", function ($post_data, $action) {
+
+	// 	if ($action == "default") {
+	// 		$result = $_SESSION["cart"]->add_order($post_data["id"], intval($post_data["count"]));
+	// 		$_SESSION["cart"]->set_cookie();
+			
+	// 		echo json_encode($result);
+			
+	// 	}elseif ($action == "confirm") {
+
+	// 		$result = $_SESSION["cart"]->pay_cart($_SESSION["Restaurant"]->order_msg);
+	// 		$_SESSION["cart"]->set_cookie();
+	// 		echo json_encode(["whatsapp" => $_SESSION["Restaurant"]->whatsapp, "msg" => $result]);
+
+	// 	}elseif ($action == "update") {
+			
+	// 		$result = $_SESSION["cart"]->update_food_count($post_data["id"], $post_data["new_count"]);
+	// 		$_SESSION["cart"]->set_cookie();
+
+	// 		echo json_encode(["total_price" => $_SESSION["cart"]->calculate_total()]);
+
+	// 	}elseif ($action == "deleteorder") {
+			
+	// 		$result = $_SESSION["cart"]->delete_order($post_data["id"]);
+	// 		$_SESSION["cart"]->set_cookie();
+	// 		echo json_encode($result);
+	// 	}elseif ($action == "delete") {
+			
+	// 		$result = $_SESSION["cart"]->clear_cart();
+	// 		$_SESSION["cart"]->set_cookie();
+	// 		echo json_encode(["total_price" => $_SESSION["cart"]->calculate_total()]);
+
+	// 	}
+		
+	// 	exit();
+	// });
+
+	$router->get("/api/category/{id}", function ($params = NULL) {
+
+	extract($params);
+
+		$db = DBC::get_instance()->dbh;
+
+		if ($id != NULL) {
+
+    	$stmt = $db->prepare("SELECT * FROM foods WHERE category = ?");
+			$stmt->execute([$id]);
+
+			if ($stmt->rowCount() > 0) {
+				$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+				echo json_encode($data);
+				return true;
+			}
+			
+		}
+
+		$stmt = $db->prepare("SELECT * FROM foods");
+		$stmt->execute();
+		$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		
+		echo json_encode($data);
+
+	});
+
+	
+	$router->run(false);// $is_admin = false
+
+
 
 	// $admin_page  = [
 	// 	"dashboard",
-	// 	"general"
+	// 	"Restaurants"
 	// ];
 
 	// $operation_dirs  = [

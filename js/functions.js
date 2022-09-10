@@ -21,7 +21,7 @@ function createFoodsCards(res) {
       caption.append(title);
 
       let link = $("<a>");
-      link.attr("href", `http://localhost/food/food/${data.id}`);
+      link.attr("href", `http://food.test/food/${data.id}`);
       link.text(data.name);
       title.append(link);
       
@@ -50,18 +50,28 @@ function createFoodsCards(res) {
 
 function getCat($id) {
   $.ajax({
-    url: `http://localhost/food/data/category/${$id}`,
+    url: `http://food.test/api/category/${$id}`,
     context: $("#gallery-page"),
     type: "GET",
   }).done(function(res) {
-    // remove the old foods
-    $(this).children().remove();
-
-    // create a new foods
-    let cards = createFoodsCards(JSON.parse(res));
     
-    // append the new foods
-    $(this).append(...cards);
+    if (isJsonString(res)) {
+
+      let foods = JSON.parse(res);
+  
+      if (foods.length > 0) {
+  
+        // remove the old foods
+        $(this).children().remove();
+    
+        // create a new foods
+        let cards = createFoodsCards(foods);
+        
+        // append the new foods
+        $(this).append(...cards);
+  
+      }
+    }
 
   });
 }
@@ -69,7 +79,7 @@ function getCat($id) {
 function orderFood(food_id, orderCount) {
 
   $.ajax({
-    url: `http://localhost/food/data/cart`,
+    url: `http://food.test/data/cart`,
     type: "POST",
     data: {
       "id": food_id,
@@ -90,7 +100,7 @@ function orderFood(food_id, orderCount) {
 function updateOrderCount(food_id, newOrderCount) {
 
   $.ajax({
-    url: `http://localhost/food/data/cart/update`,
+    url: `http://food.test/data/cart/update`,
     type: "POST",
     data: {
       "id": food_id,
@@ -104,7 +114,6 @@ function updateOrderCount(food_id, newOrderCount) {
       notef.data("number", number);
       notef.text(number);
       let price = $("#total-price");
-      console.log(res.total_price);
       price.data("number", res.total_price);
       price.text(res.total_price);
     }else {
@@ -116,7 +125,7 @@ function updateOrderCount(food_id, newOrderCount) {
 function deleteOrder(foodId) {
 
   $.ajax({
-    url: `http://localhost/food/data/cart/deleteorder`,
+    url: `http://food.test/data/cart/deleteorder`,
     type: "POST",
     data: {
       "id": foodId,
@@ -135,7 +144,7 @@ function deleteOrder(foodId) {
 function payCart() {
 
   $.ajax({
-    url: `http://localhost/food/data/cart/confirm`,
+    url: `http://food.test/data/cart/confirm`,
     type: "POST",
     data: {
       "confirm": true,
@@ -157,7 +166,7 @@ function payCart() {
 function clearCart() {
 
   $.ajax({
-    url: `http://localhost/food/data/cart/delete`,
+    url: `http://food.test/data/cart/delete`,
     type: "POST",
   }).done(function(res) {
     if (res) {
@@ -173,7 +182,7 @@ function clearCart() {
 function deleteFood(id) {
 
   $.ajax({
-    url: `http://localhost/food/manage/food/delete_food`,
+    url: `http://food.test/manage/food/delete_food`,
     type: "POST",
     data: {
       "food_id": id,
@@ -192,7 +201,7 @@ function deleteFood(id) {
 function deleteCategory(id, elm) {
 
   $.ajax({
-    url: `http://localhost/food/manage/category/delete_category`,
+    url: `http://food.test/manage/category/delete_category`,
     type: "POST",
     data: {
       "id": id,
@@ -237,7 +246,7 @@ function updateFood(id) {
     }
   });
   $.ajax({
-    url: `http://localhost/food/manage/food/update_food`,
+    url: `http://food.test/manage/food/update_food`,
     type: "POST",
     data: form,
     processData: false,
@@ -245,7 +254,7 @@ function updateFood(id) {
   }).done(function(res) {
     res = JSON.parse(res);
     if (res.success === true) {
-      location.href = "http://localhost/food/manage/food";
+      location.href = "http://food.test/manage/food";
     }else {
       console.log(res);
       console.error(res.error);
@@ -272,7 +281,7 @@ function updateCategory(id) {
     }
   });
   $.ajax({
-    url: `http://localhost/food/manage/category/update_category`,
+    url: `http://food.test/manage/category/update_category`,
     type: "POST",
     data: form,
     processData: false,
@@ -280,7 +289,7 @@ function updateCategory(id) {
   }).done(function(res) {
     res = JSON.parse(res);
     if (res.success === true) {
-      location.href = "http://localhost/food/manage/category";
+      location.href = "http://food.test/manage/category";
     }else {
       console.log(res);
       console.error(res.error);
@@ -290,7 +299,7 @@ function updateCategory(id) {
 
 }
 
-function updateGeneral() {
+function updateRestaurants() {
   form = new FormData();
   form.set("phone", $("#phone").val());
   form.set("whatsapp", $("#whats").val());
@@ -309,7 +318,7 @@ function updateGeneral() {
     }
   });
   $.ajax({
-    url: `http://localhost/food/manage/general/update`,
+    url: `http://food.test/manage/Restaurants/update`,
     type: "POST",
     data: form,
     processData: false,
@@ -317,7 +326,7 @@ function updateGeneral() {
   }).done(function(res) {
     res = JSON.parse(res);
     if (res.success === true) {
-      location.href = "http://localhost/food/manage/general";
+      location.href = "http://food.test/manage/Restaurants";
     }else {
       console.log(res);
       console.error(res.error);

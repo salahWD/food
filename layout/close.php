@@ -1,8 +1,8 @@
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-	<script src="<?php echo Router::get_path("js");?>/parallax.min.js"></script>
+	<script src="<?php echo Router::route("js");?>/parallax.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-	<script src="<?php echo Router::get_path("js");?>/functions.js"></script>
+	<script src="<?php echo Router::route("js");?>/functions.js"></script>
 	<script>
 		
 			// select image button
@@ -139,8 +139,8 @@
 							updateFood(id);
 						}else if ($(this).data("type") == "category") {
 							updateCategory(id);
-						}else if ($(this).data("type") == "general") {
-							updateGeneral();
+						}else if ($(this).data("type") == "Restaurants") {
+							updateRestaurants();
 						}
 					});
 					
