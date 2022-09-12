@@ -9,11 +9,11 @@
 
       include_once MODELS_URL . "restaurant.php";
 
-      $restaurant = Restaurant::get_restaurant(1);
+      global $restaurant;
 
       /* Getting Page Data */
-      $variables["custom_css"] = "home";
-      $variables["foods"] = $restaurant->get_foods();
+      $variables["restaurant"] = $restaurant;
+      $variables["foods"] = $restaurant->get_foods(3);
       $variables["categories"] = $restaurant->get_categories();
 
       /* Including The Page Requirments */

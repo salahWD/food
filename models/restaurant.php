@@ -27,6 +27,21 @@ class Restaurant {
 
   }
 
+  public static function get_restaurant_by_name($name) {
+
+    $sql = DBC::get_instance()->dbh->prepare("SELECT * FROM restaurants WHERE url_name = ?");
+    $sql->execute([$name]);
+
+    if ($sql->rowCount() > 0) {
+      $data = $sql->fetchObject("Restaurant");
+      $data->currency = self::get_currency($data->id);
+      return $data;
+    }else {
+      return false;
+    }
+
+  }
+
   public static function get_currency($id) {
 
     $db = DBC::get_instance()->dbh;
@@ -43,17 +58,21 @@ class Restaurant {
     }
 
   }
-  
-  public function get_foods() {
-    
+
+  public function get_foods(int $count = NULL) {
+
     $db = DBC::get_instance();
+
+    if (!is_null($count)) {
+      $limit = "LIMIT $count";
+    }
 
     $sql = $db->dbh->prepare(
       "SELECT F.* FROM Restaurants R
       INNER JOIN menus M ON M.restaurant = R.id
       INNER JOIN categories C ON C.menu = M.id
       INNER JOIN foods F ON F.category = C.id
-      WHERE R.id = ?");
+      WHERE R.id = ? $limit");
     $sql->execute([$this->id]);
 
     if ($sql->rowCount() > 0) {
@@ -65,13 +84,13 @@ class Restaurant {
     }
 
   }
-  
+
   public function get_categories() {
-    
+
     $db = DBC::get_instance();
 
     $sql = $db->dbh->prepare(
-      "SELECT C.name, C.id FROM Restaurants R
+      "SELECT C.* FROM Restaurants R
       INNER JOIN menus M ON M.restaurant = R.id
       INNER JOIN categories C ON C.menu = M.id
       WHERE R.id = ?");

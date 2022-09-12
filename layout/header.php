@@ -1,26 +1,128 @@
-<div class="placeholder">
-  <div class="parallax-window" data-parallax="scroll" data-image-src="<?php echo Router::route("img") . DIRECTORY_SEPARATOR;?>simple-house-01.jpg">
-  
-    <div class="tm-header">
-        <div class="container">
-        <div class="row tm-header-inner">
-          <div class="col-md-6 col-12">
-            <img src="<?php echo Router::route("img") . DIRECTORY_SEPARATOR;?>simple-house-logo.png" alt="Logo" class="tm-site-logo" /> 
-            <div class="tm-site-text-box">
-              <h1 class="tm-site-title">My restaurant</h1>
-              <h6 class="tm-site-description">order your food quickly</h6>	
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+    <!-- Header -->
+    <header id="header" class="light">
 
-<span class="cart-container">
-  <a href="<?php echo Router::route("cart");?>">
-    <i class="fa fa-shopping-cart"></i>
-  </a>
-  <span id="notification" data-number="<?php echo isset($_SESSION["cart"]) ? count($_SESSION["cart"]->orders): 0;?>" class="notification"><?php echo isset($_SESSION["cart"]) ? count($_SESSION["cart"]->orders): 0;?></span>
-  <button id="clear-cart" class="clear-cart btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>  
-</span>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <!-- Logo -->
+                    <div class="module module-logo light">
+                        <a href="#">
+                            <img src="<?= $restaurant->logo;?>" alt="" width="88">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <!-- Navigation -->
+                    <nav class="module module-navigation left mr-4">
+                        <ul id="nav-main" class="nav nav-main">
+                            <li class="has-dropdown">
+                                <a href="#">Home</a>
+                                <div class="dropdown-container">
+                                    <ul>
+                                        <li><a href="index.html">Home Basic</a></li>
+                                        <li><a href="index-burgers.html">Home Burgers</a></li>
+                                        <li><a href="index-slider.html">Home Fullwidth Slider</a></li>
+                                        <li><a href="index-video.html">Home Video</a></li>
+                                        <li><a href="index-fresh.html">Home Fresh <span class="badge badge-success">New</span></a></li>
+                                        <li><a href="index-dark.html">Home Dark <span class="badge badge-success">New</span></a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="has-dropdown">
+                                <a href="#">About</a>
+                                <div class="dropdown-container">
+                                    <ul class="dropdown-mega">
+                                        <li><a href="page-about.html">About Us</a></li>
+                                        <li><a href="page-services.html">Services</a></li>
+                                        <li><a href="page-gallery.html">Gallery</a></li>
+                                        <li><a href="page-reviews.html">Reviews</a></li>
+                                        <li><a href="page-faq.html">FAQ</a></li>
+                                    </ul>
+                                    <div class="dropdown-image">
+                                        <img src="http://assets.suelo.pl/soup/img/photos/dropdown-about.jpg" alt="">
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="has-dropdown">
+                                <a href="#">Menu</a>
+                                <div class="dropdown-container">
+                                    <ul>
+                                        <li class="has-dropdown">
+                                            <a href="#">List</a>
+                                            <ul>
+                                                <li><a href="menu-list-navigation.html">Navigation</a></li>
+                                                <li><a href="menu-list-collapse.html">Collapse</a></li>
+                                            </ul>
+                                        </li>
+                                        <li class="has-dropdown">
+                                            <a href="#">Grid</a>
+                                            <ul>
+                                                <li><a href="menu-grid-navigation.html">Navigation</a></li>
+                                                <li><a href="menu-grid-collapse.html">Collapse</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li><a href="page-offers.html">Offers</a></li>
+                            <li><a href="page-contact.html">Contact</a></li>
+                            <li class="has-dropdown">
+                                <a href="#">More</a>
+                                <div class="dropdown-container">
+                                    <ul class="dropdown-mega">
+                                        <li><a href="page-offer-single.html">Offer single</a></li>
+                                        <li><a href="page-product.html">Product</a></li>
+                                        <li><a href="book-a-table.html">Book a table</a></li>
+                                        <li><a href="checkout.html">Checkout</a></li>
+                                        <li><a href="confirmation.html">Confirmation</a></li>
+                                        <li><a href="blog.html">Blog</a></li>
+                                        <li><a href="blog-sidebar.html">Blog + Sidebar</a></li>
+                                        <li><a href="blog-post.html">Blog Post</a></li>
+                                        <li><a href="documentation/" target="_blank">Documentation</a></li>
+                                    </ul>
+                                    <div class="dropdown-image">
+                                        <img src="http://assets.suelo.pl/soup/img/photos/dropdown-more.jpg" alt="">
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </nav>
+                    <div class="module left">
+                        <a href="menu-list-navigation.html" class="btn btn-outline-secondary"><span>Order</span></a>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <a href="#" class="module module-cart right" data-toggle="panel-cart">
+                        <span class="cart-icon">
+                            <i class="ti ti-shopping-cart"></i>
+                            <span class="notification">0</span>
+                        </span>
+                        <span class="cart-value">$<span class="value">0.00</span></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </header>
+    <!-- Header / End -->
+
+    <!-- Header -->
+    <header id="header-mobile" class="light">
+
+        <div class="module module-nav-toggle">
+            <a href="#" id="nav-toggle" data-toggle="panel-mobile"><span></span><span></span><span></span><span></span></a>
+        </div>
+
+        <div class="module module-logo">
+            <a href="index.html">
+                <img src="assets/img/logo-horizontal-dark.svg" alt="">
+            </a>
+        </div>
+
+        <a href="#" class="module module-cart" data-toggle="panel-cart">
+            <i class="ti ti-shopping-cart"></i>
+            <span class="notification">0</span>
+        </a>
+
+    </header>
+    <!-- Header / End -->

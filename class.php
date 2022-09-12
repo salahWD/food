@@ -2,9 +2,9 @@
 
 /* Controller class */
   class Controller {
-    
+
     public function run_action($action = "default", ...$args) {
-			
+
       $action .= "_action";
       if (method_exists($this, $action)) {
         $this->$action(...$args);
@@ -36,19 +36,19 @@
 		private const POST_METHOD = "POST";
 		private const ID          = "{id}";
 		private const PARAM       = "{param}";
-	
+
 		public function get($url, $handler) {
 			$this->add_handler(self::GET_METHOD, $url, $handler);
 		}
-	
+
 		public function get_admin($url, $handler) {
 			$this->add_handler(self::GET_METHOD, $url, $handler, true/* admin check */);
 		}
-	
+
 		public function post($url, $handler) {
 			$this->add_handler(self::POST_METHOD, $url, $handler);
 		}
-	
+
 		protected function add_handler($method, $url, $handler, $admin_check = false) {
 			$this->handlers[$method . ":" . $url] = [
 				"url" => $url,
@@ -57,14 +57,14 @@
 				"admin_check" => $admin_check,
 			];
 		}
-	
+
 		public function add_404($handler) {
 			$this->not_found = $handler;
 		}
-	
+
 		protected function has_id($url, $current_url) {
 			/* $url => handler url like (=>url, funciton () {) */
-	
+
 			if (str_contains($url, self::ID)) {
 
 				$allowed = ["*"];
@@ -79,111 +79,108 @@
 					return false;
 				}
 			}
-	
+
 		}
 
-		protected function restaurant_name($current_url) {
-	
-			$url_arr = explode("/", $current_url);
+		public function restaurant_name($url) {
+
+			$url_arr = explode("/", $url);
 			if (is_string($url_arr[1]) && strlen($url_arr[1]) > 3) {
 
 				$this->restaurant_name = $url_arr[1];
-				return str_replace($url_arr[1], "", $current_url);
+				return str_replace($url_arr[1], "", $url);
 
 			}else {
-				return $current_url;
+				return $url;
 			}
-	
+
 		}
-	
+
 		protected function has_param($url, $current_url) {
 			/* $url => handler url like (=>url, funciton () {) */
-	
+
 				if (str_contains($url, self::PARAM)) {
-	
+
 					$path_arr = explode("/", $url);
 					$id_index = array_search(self::PARAM, $path_arr);
-					
+
 					$url_arr = explode("/", $current_url);
 					$title = isset($url_arr[$id_index]) && !empty($url_arr[$id_index]) ? $url_arr[$id_index]: null;
-	
+
 					if ($title != null && is_string($title) && strlen($title) > 0) {
 						return $title;
 					}else {
 						return false;
 					}
-	
+
 				}
-	
+
 		}
-	
-		public function run($is_admin = false) {
-			
-			$request_parse  = parse_url($_SERVER["REQUEST_URI"]);
+
+		public function run($request_url, $is_admin = false) {
+
 			$method         = $_SERVER["REQUEST_METHOD"];
-	
-			$request_url = $this->restaurant_name($request_parse["path"] ?? "");// saves (restaurant name) and delets it from the url
 			$callback = null;
 			$id = null;
 			$param = null;
 
 			foreach($this->handlers as $i => $handler) {
-				
+
 				$id = null;
 				$param = null;
-				
+
 				if (($handler["admin_check"] === true && $is_admin) || $handler["admin_check"] === false) {
-					
+
 					$id = $this->has_id($handler["url"], $request_url);
 					$param = $this->has_param($handler["url"], $request_url);
-					
+
 					if ($id != false) {
-						
+
 						$handler["url"] = str_replace(self::ID, $id, $handler["url"]);
-						
+
 						if ($request_url == $handler["url"] && $handler["method"] == $method) {
 							$callback = $handler["handler"];
 							break;
 						}
 						continue;
 					}else if ($param != false) {
-	
+
 						$handler["url"] = str_replace(self::PARAM, $param, $handler["url"]);
 						if ($request_url == $handler["url"] && $handler["method"] == $method) {
-							
+
 							$callback = $handler["handler"];
 							break;
 						}
 						continue;
 					}else if ($request_url == $handler["url"] && $handler["method"] == $method) {
-	
+
 						$callback = $handler["handler"];
-	
+
 					}
 				}else {
 					continue;
 				}
 				// echo "$i<br>";
-	
+
 			}
-	
+
 			if (!$callback) {
 				if (!empty($this->not_found)) {
 					$callback = $this->not_found;
 				}
 			}
-	
+
 			call_user_func_array($callback, [
 				array_merge($_GET, $_POST, $_FILES, ["id" => $id, "param" => $param, "restaurant" => $this->restaurant_name])
 			]);
 			exit();
-	
+
 		}
-	
+
 		public static function route($page) {
 			return M_URL . $page;
 		}
-	
+
 		public static function set_session($name, $value) {
 			if (!isset($_SESSION)) {
 				session_start();
@@ -193,7 +190,7 @@
 			}
 			return $_SESSION[$name] = $value;
 		}
-	
+
 		public static function get_session($name, $delete) {
 			if (!isset($_SESSION)) {
 				session_start();
@@ -208,7 +205,7 @@
 				return null;
 			}
 		}
-	
+
 		public static function get_user() {
 			if (!isset($_SESSION)) {
 				session_start();
@@ -221,7 +218,7 @@
 				return null;
 			}
 		}
-	
+
 		public static function isset_session($name) {
 			if (!isset($_SESSION)) {
 				session_start();
@@ -232,11 +229,11 @@
 				return false;
 			}
 		}
-	
+
 	}
 
 	class Template {
-	
+
 		public static function view($page, $level = 3, $variables = null) {
 			/*
 				$page   => view page in /views/$page
@@ -251,16 +248,16 @@
 			if (!empty($variables)) {
 				extract($variables);
 			}
-			
+
 			if ($level > 1) {
 				include_once LAYOUT_PATH . "head.php";
 			}
 			if ($level == 3 || $level == 4 ) {
 				include_once LAYOUT_PATH . "header.php";
 			}
-	
+
 			include_once VIEW_PATH . $page . ".php";// include the actual $page
-	
+
 			if ($level == 3 || $level == 5) {
 				include_once LAYOUT_PATH . "footer.php";
 			}
@@ -268,7 +265,7 @@
 				include_once LAYOUT_PATH . "close.php";
 			}
 		}
-	
+
 		public static function admin_view($page, $level = 3, $variables = null) {
 			/*
 				$page       => view page in /views/$page
@@ -282,7 +279,7 @@
 			if (!empty($variables)) {
 				extract($variables);
 			}
-			
+
 			if ($level > 1) {
 				include_once LAYOUT_PATH . "dashboard_head.php";
 			}
@@ -291,14 +288,14 @@
 				$admin = Admin::get_admin_session();
 				include_once LAYOUT_PATH . "dashboard_navabr.php";
 			}
-	
+
 			include_once VIEW_PATH . $page . ".php";// include the actual $page
-	
+
 			if ($level > 1) {
 				include_once LAYOUT_PATH . "dashboard_close.php";
 			}
 		}
-	
+
 	}
 
 	class Cart {
@@ -310,7 +307,7 @@
 			$cookie_cart = $this->get_cookie();
 
 			if ($cookie_cart) {
-				
+
 				if (count($cookie_cart->orders) > 0) {
 					foreach($cookie_cart->orders as $order) {
 						$this->add_order($order->id, $order->ordered_count);
@@ -398,9 +395,9 @@
 			if (count($this->orders) > 0) {
 
 				foreach ($this->orders as $order) {
-				
+
 					$total_price += intval($order->price) * intval($order->ordered_count);
-				
+
 				}
 			}
 
@@ -435,7 +432,7 @@
 				}
 
 				$sql .= ")";
-				
+
 				$stmt = $db->dbh->prepare($sql);
 				$stmt->execute([...$ids]);
 
@@ -469,7 +466,7 @@
 			foreach($this->orders as $order) {
 				array_push($ids, $order->id);
 			}
-			
+
 			$sql = $db->dbh->prepare("SELECT " . $selector . " FROM foods WHERE id IN ( ?" . str_repeat(", ?", count($this->orders) - 1) . ")");
 			$sql->execute([...$ids]);
 
@@ -498,19 +495,18 @@
 		}
 
 	}
-	
+
 	class Order {
 		public $id;
 		public $price;
 		public $ordered_count;
 	}
-	
+
 	class User {
 		public $id;
 		public $username;
 		public $password;
 		public $permission;
 	}
-
 
 ?>

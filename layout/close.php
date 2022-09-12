@@ -1,20 +1,39 @@
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-	<script src="<?php echo Router::route("js");?>/parallax.min.js"></script>
+    <!-- Cookies Bar -->
+    <div id="cookies-bar" class="body-bar cookies-bar">
+        <div class="body-bar-container container">
+            <div class="body-bar-text">
+                <h4 class="mb-2">Cookies & GDPR</h4>
+                <p>This is a sample Cookies / GDPR information. You can use it easily on your site and even add link to <a href="#">Privacy Policy</a>.</p>
+            </div>
+            <div class="body-bar-action">
+                <button class="btn btn-primary" data-accept="cookies"><span>Accept</span></button>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <!-- Jquery JS -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <!-- Bootstrap JS -->
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <!-- Functions JS (potential delete) -->
 	<script src="<?php echo Router::route("js");?>/functions.js"></script>
+  <!-- Core JS -->
+	<script src="<?php echo Router::route("js");?>/core.js"></script>
+
 	<script>
-		
+
 			// select image button
 			if (document.getElementById("update-img-btn")) {
 				let updateImgBtn 		= document.getElementById("update-img-btn");
 				let updateImginput 	= document.getElementById("update-img-input");
 				let previewImg 			= document.getElementById("img-preview");
-	
+
 				updateImgBtn.onclick = function () {
 					updateImginput.click();
 				}
-	
+
 				updateImginput.onchange = e => {
 					let [file] = updateImginput.files;
 					previewImg.src = URL.createObjectURL(file);
@@ -22,7 +41,7 @@
 			}
 
 		$(document).ready(function(){
-			
+
 			// chosing catigory
 			let cat = $("#category-selector");
 			cat.on('change', function() {
@@ -39,7 +58,7 @@
 					if (+input.val() < 100) {
 						input.attr('value', +input.val() + 1);
 					}
-						
+
 				});
 
 				$(this).find(".order-count-changer-drop").click(function() {
@@ -48,11 +67,11 @@
 					if (+input.val() > 1) {
 						input.attr('value', +input.val() - 1);
 					}
-						
+
 				});
 
 				let parent = $(this);
-				
+
 				$(this).find(".submet-btn").click(function() {
 					let orderCount = parseInt(parent.find(".order-count").val());
 					let url = window.location.href.split("/");
@@ -90,7 +109,7 @@
 				});
 
 			});
-			
+
 
 			// clear cart
 			let clearCartBtn = $("#clear-cart");
@@ -143,12 +162,13 @@
 							updateRestaurants();
 						}
 					});
-					
+
 				}
 
 			});
 
 		</script>
 	<?php endif;?>
+
 </body>
 </html>
