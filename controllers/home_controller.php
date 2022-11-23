@@ -8,13 +8,15 @@
       $db = DB::getInstance();
 
       include_once MODELS_URL . "restaurant.php";
+      include_once MODELS_URL . "menu.php";
 
       global $restaurant;
 
       /* Getting Page Data */
       $variables["restaurant"] = $restaurant;
-      $variables["foods"] = $restaurant->get_foods(3);
+      $variables["menus"] = Menu::get_menus($restaurant->id);
       $variables["categories"] = $restaurant->get_categories();
+      $variables["custom_css"] = "home";
 
       /* Including The Page Requirments */
       $template = new Template();

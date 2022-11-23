@@ -30,7 +30,7 @@
 
     <!-- CSS Styles -->
     <link href="<?php echo CSS_URL;?>core.css" rel="stylesheet" />
-    <link href="<?php echo CSS_URL;?>theme-beige.css" rel="stylesheet" />
+    <link href="<?php echo CSS_URL;?>theme-red.css" rel="stylesheet" />
       <?php if (isset($custom_css) && $custom_css != NULL):?>
         <?php if (is_array($custom_css)):?>
           <?php foreach($custom_css as $css):?>
@@ -41,6 +41,6 @@
         <?php endif;?>
       <?php endif;?>
   </head>
-<body class="no-margins">
+<body class="">
   <!-- Body Wrapper -->
-  <div id="body-wrapper" class="animsition">
+  <div id="body-wrapper" class="animsition header-absolute">

@@ -1,0 +1,115 @@
+.editable-title {
+  font-size: 4.75rem;
+  color: #383c40;
+  line-height: 1.15;
+  margin-bottom: 12px;
+  width: fit-content;
+  font-weight: 100;
+}
+.editable-disc {
+  width: fit-content;
+  display: block;
+  max-width: 100%;
+  min-width: 250px;
+  height: fit-content;
+}
+.menu-category  {
+  position: relative;
+}
+.menu-category-content {
+  display: flex !important;
+  flex-direction: column;
+}
+input.food-price {
+  width: fit-content;
+  max-width: 80px;
+  display: inline;
+  margin: 0 0 0 4px;
+  padding: 4px 6px;
+  font-size: 16px;
+  line-height: 1.45;
+  border-color: #25282a38;
+  border-width: 2px;
+}
+.wrong {
+  border-bottom: 1px solid rgb(241, 147, 147);
+}
+.btn .error-msg,
+.btn .confairm-msg {
+  transition: .5s ease-out;
+  font-size: 0;
+}
+.btn-danger .error-msg,
+.active .confairm-msg {
+  margin-right: 12px;
+  font-size: 16px;
+}
+.delete-cat,
+.image-btn {
+  position: absolute;
+  z-index: 1;
+  padding-right: 1.5rem;
+  padding-left: 1.5rem;
+  right: 3%;
+  top: 22px;
+}
+.image-btn {
+  top: 97px;
+}
+.add-food {
+  order: 999;
+}
+.add-food:hover::before,
+.add-food:active::before,
+.add-food:focus::before {
+  all: unset;
+}
+.fa-image {
+  font-size: 26px;
+}
+.fa-image.fa-sm {
+  font-size: 18px;
+}
+.fade-in {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 2s linear;
+}
+.fade-out {
+  visibility: hidden;
+  opacity: 0;
+  transform: scaleY(0.1) scaleX(0.9);
+  height: 0px !important;
+  margin: 0px !important;
+  padding: 0px !important;
+  border-width: 0px !important;
+  transition: visibility 0s 1s, opacity 0.4s ease-in, transform 0.75s, height 0.9s, margin 0.4s, margin 0.4s, border-width 0.4s;
+}
+.hide {
+  display: none;
+}
+.page-title {
+  position: relative;
+}
+.page-title::before {
+  content: "";
+  background: rgb(255,255,255);
+  background: radial-gradient(circle, rgba(255,255,255,0) 0%, rgba(0,0,0,0.7) 100%);
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  top: 0;
+}
+.menu-title {
+  color: white;
+}
+.menu-desc {
+  color: #fcfcfc!important;
+  margin-top: 12px;
+}
+.price {
+  font-size: 16px;
+}

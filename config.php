@@ -1,19 +1,21 @@
 <?php
 
-  define("M_URL", "http://food.test" . DIRECTORY_SEPARATOR);
+  define("M_URL", "http://food.test/");
   define("M_PATH", dirname(__FILE__) . DIRECTORY_SEPARATOR);
   define("CONTROLLERS_URL", dirname(__FILE__) . DIRECTORY_SEPARATOR . "controllers" . DIRECTORY_SEPARATOR );
   define("MODELS_URL", dirname(__FILE__) . DIRECTORY_SEPARATOR . "models" . DIRECTORY_SEPARATOR );
   define("LAYOUT_PATH", dirname(__FILE__) . DIRECTORY_SEPARATOR . "layout" . DIRECTORY_SEPARATOR);
   define("VIEW_PATH", dirname(__FILE__) . DIRECTORY_SEPARATOR . "views" . DIRECTORY_SEPARATOR);
-  define("CSS_URL", "http://localhost" . DIRECTORY_SEPARATOR . "food" . DIRECTORY_SEPARATOR . "css"  . DIRECTORY_SEPARATOR);
-  define("IMAGES_URL", dirname(__FILE__) . DIRECTORY_SEPARATOR . "img" . DIRECTORY_SEPARATOR);
+  define("CSS_URL", "http://food.test" . DIRECTORY_SEPARATOR . "css"  . DIRECTORY_SEPARATOR);
+  define("IMAGES_PATH", dirname(__FILE__) . DIRECTORY_SEPARATOR . "img" . DIRECTORY_SEPARATOR);
+  define("IMAGES_URL", "http://food.test" . DIRECTORY_SEPARATOR . "img" . DIRECTORY_SEPARATOR);
   define("FOOD_IMAGES", dirname(__FILE__) . DIRECTORY_SEPARATOR . "img" . DIRECTORY_SEPARATOR . "foods" . DIRECTORY_SEPARATOR);
   define("CATEGORIES_IMAGES", dirname(__FILE__) . DIRECTORY_SEPARATOR . "img" . DIRECTORY_SEPARATOR . "categories" . DIRECTORY_SEPARATOR);
+  define("MENUS_IMAGES", dirname(__FILE__) . DIRECTORY_SEPARATOR . "img" . DIRECTORY_SEPARATOR . "menus" . DIRECTORY_SEPARATOR);
   define("LOGOS_IMAGES", dirname(__FILE__) . DIRECTORY_SEPARATOR . "img" . DIRECTORY_SEPARATOR . "logos" . DIRECTORY_SEPARATOR);
-  
+
   /* DB Congif */
-  
+
   define("USERNAME", "root");
   define("PASSWORD", "");
   define("DATABASE", "food");
@@ -38,7 +40,7 @@
     $alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
     $image_name = "";
 
-    for ($i=0; $i < 10; $i++) { 
+    for ($i=0; $i < 10; $i++) {
       $image_name .= $alpha[rand(0, strlen($alpha)-1)];
     }
 
@@ -48,7 +50,7 @@
     $ext = end($name_array);
 
     move_uploaded_file($img["tmp_name"],  $_SERVER['DOCUMENT_ROOT'] . $file_uploads . $image_name . $ext);
-    
+
     return M_PATH . "img/category/" . $image_name . $ext;
   }
 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 10, 2022 at 03:25 PM
+-- Generation Time: Nov 23, 2022 at 04:33 PM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 8.0.2
 
@@ -40,9 +40,10 @@ CREATE TABLE `categories` (
 --
 
 INSERT INTO `categories` (`id`, `name`, `description`, `image`, `menu`) VALUES
-(2, 'american', 'and this is an amercan food\r\n', 'http://localhost\\food\\img\\categories\\rdj4dzdd16db2660.jpg', 1),
-(4, 'americany', 'and this is an amercan food&#13;&#10;', 'http://localhost/food/img/categories/03.jpg', 1),
-(13, 'ITALYAN', 'this is a italyan foods', 'http://localhost/food/img/categories/01.jpg', 1);
+(2, 'fods', 'and this is an amercan food\r\n', 'http://localhost/food/img/categories/menu-title-sushi.jpg', 1),
+(4, 'americany', 'and this is an amercan food&#13;&#10;', 'http://localhost/food/img/categories/menu-title-pizza.jpg', 1),
+(13, 'ITALYAN', 'this is a italyan foods', 'http://localhost/food/img/categories/menu-title-pasta.jpg', 1),
+(32, 'Burgers', 'this is a Burger foods', 'http://localhost/food/img/categories/menu-title-desserts.jpg', 1);
 
 -- --------------------------------------------------------
 
@@ -61,8 +62,8 @@ CREATE TABLE `currencies` (
 --
 
 INSERT INTO `currencies` (`id`, `name`, `icon`) VALUES
-(1, 'U.S. Dollar', 'USD'),
-(2, 'European Euro', 'EUR'),
+(1, 'U.S. Dollar', '$'),
+(2, 'European Euro', '€'),
 (3, 'Japanese Yen', 'JPY'),
 (4, 'British Pound', 'GBP');
 
@@ -100,8 +101,9 @@ INSERT INTO `foods` (`id`, `name`, `price`, `description`, `image`, `category`) 
 
 CREATE TABLE `menus` (
   `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
   `image` varchar(255) NOT NULL,
-  `color` varchar(255) NOT NULL,
   `restaurant` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -109,8 +111,9 @@ CREATE TABLE `menus` (
 -- Dumping data for table `menus`
 --
 
-INSERT INTO `menus` (`id`, `image`, `color`, `restaurant`) VALUES
-(1, 'sanabel main menu', '#ddd', 1);
+INSERT INTO `menus` (`id`, `name`, `description`, `image`, `restaurant`) VALUES
+(1, 'sanabel ramazan menu', 'test descrtiption', 'http://localhost/food/img/menus/default-ramadan.jpg', 1),
+(2, 'sanabel main menu', 'lorem description', 'http://localhost/food/img/menus/default.jpg', 1);
 
 -- --------------------------------------------------------
 
@@ -120,9 +123,10 @@ INSERT INTO `menus` (`id`, `image`, `color`, `restaurant`) VALUES
 
 CREATE TABLE `restaurants` (
   `id` int(11) NOT NULL,
-  `logo` varchar(255) NOT NULL DEFAULT 'default.jpg',
   `name` varchar(255) NOT NULL,
   `url_name` varchar(255) NOT NULL,
+  `logo` varchar(255) NOT NULL DEFAULT 'default.jpg',
+  `logo_secondary` varchar(255) DEFAULT NULL,
   `number` varchar(255) NOT NULL,
   `whatsapp` varchar(255) NOT NULL,
   `order_msg` varchar(255) NOT NULL,
@@ -134,8 +138,9 @@ CREATE TABLE `restaurants` (
 -- Dumping data for table `restaurants`
 --
 
-INSERT INTO `restaurants` (`id`, `logo`, `name`, `url_name`, `number`, `whatsapp`, `order_msg`, `address`, `currency`) VALUES
-(1, 'http://localhost\\food\\img\\logos\\rduq4i854ff75231.png', 'sanabel', 'sanabel', '009055271885', '009055271885', 'hey! i like to order ( ## ) wich cost foodprice how much time will it take?', 'esenyurt meydan', 2);
+INSERT INTO `restaurants` (`id`, `name`, `url_name`, `logo`, `logo_secondary`, `number`, `whatsapp`, `order_msg`, `address`, `currency`) VALUES
+(1, 'sanabel', 'sanabel', 'http://localhost\\food\\img\\logos\\resm-logo.svg', 'http://localhost\\food\\img\\logos\\resm-logo-white.svg', '009055271885', '009055271885', 'hey! i like to order ( ## ) wich cost foodprice how much time will it take?', 'esenyurt meydan', 2),
+(2, 'empty R', 'empty-R', 'default.jpg', NULL, '05434344522', '05434344522', 'hi i want to oerder', 'saudi arabia', 1);
 
 -- --------------------------------------------------------
 
@@ -188,7 +193,8 @@ ALTER TABLE `foods`
 -- Indexes for table `menus`
 --
 ALTER TABLE `menus`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `menus_resteaurant` (`restaurant`);
 
 --
 -- Indexes for table `restaurants`
@@ -212,7 +218,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 
 --
 -- AUTO_INCREMENT for table `currencies`
@@ -224,25 +230,25 @@ ALTER TABLE `currencies`
 -- AUTO_INCREMENT for table `foods`
 --
 ALTER TABLE `foods`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `menus`
 --
 ALTER TABLE `menus`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT for table `restaurants`
 --
 ALTER TABLE `restaurants`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables
@@ -264,7 +270,13 @@ ALTER TABLE `foods`
 -- Constraints for table `menus`
 --
 ALTER TABLE `menus`
-  ADD CONSTRAINT `menus_ibfk_1` FOREIGN KEY (`id`) REFERENCES `restaurants` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `menus_resteaurant` FOREIGN KEY (`restaurant`) REFERENCES `restaurants` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `restaurants`
+--
+ALTER TABLE `restaurants`
+  ADD CONSTRAINT `currency_website` FOREIGN KEY (`currency`) REFERENCES `currencies` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `users`

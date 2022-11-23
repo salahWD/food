@@ -1,50 +1,172 @@
-<div class="container">
-  <div class="d-flex align-items-center justify-content-center mt-5">
-
-
-  <article class="col-lg-3 col-md-4 col-sm-6 col-12 tm-gallery-item food-container">
-    <figure>
-      <img src="<?php echo $food->image;?>" alt="Image" class="img-fluid tm-gallery-img">
-      <figcaption>
-        <h4 class="tm-gallery-title"><a href="http://localhost\food\food/1"><?php echo $food->name;?></a></h4>
-        <p class="tm-gallery-description"><?php echo $food->description;?></p>
-        <p class="tm-gallery-price"><?php echo $food->price;?><?php echo $currency->icon;?></p>
-      </figcaption>
-    
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#orderCount">
-        <i class="fa fa-cart-plus"></i> اطلب
-      </button>
-
-      <!-- Start Popup Modal -->
-      <div class="modal fade" id="orderCount" tabindex="-1" role="dialog" aria-labelledby="orderCountTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title text-right" id="exampleModalLongTitle">حدد عدد الطلب</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
+  <!-- Section -->
+<section class="section bg-light">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 offset-lg-2">
+        <!-- Product Single -->
+        <div class="product-single">
+          <div class="product-image d-flex justify-content-center">
+              <img src="<?= $food->image;?>" alt="">
+          </div>
+          <div class="product-content">
+            <div class="product-header text-center">
+              <h1 class="product-title"><?= $food->name;?></h1>
+              <span class="product-caption text-muted">Beef, cheese, potato, onion, fries</span>
             </div>
-            <div class="modal-body d-flex flex-direction-row">
-              <button data-input="input0" class="order-count-changer-add btn btn-success mr-2"><i class="fa-solid fa-circle-up"></i></button>
-              <input id="input0" type="number" class="form-control order-count" value="1" placeholder="حدد عدد الطلبات">
-              <button data-input="input0" class="order-count-changer-drop btn btn-danger ml-2"><i class="fa-solid fa-circle-down"></i></button>
+            <p class="lead"><?= $food->description;?></p>
+            <hr class="hr-primary">
+            <h5 class="text-center text-muted">Order details</h5>
+            <div class="panel-details-container">
+              <!-- Panel Details / Size -->
+              <div class="panel-details">
+                <h5 class="panel-details-title">
+                  <label class="custom-control custom-radio">
+                    <input name="radio_title_size" type="radio" class="custom-control-input">
+                    <span class="custom-control-indicator"></span>
+                  </label>
+                  <a href="#panelDetailsSize" data-toggle="collapse">Size</a>
+                </h5>
+                  <div id="panelDetailsSize" class="collapse">
+                    <div class="panel-details-content">
+                      <div class="form-group">
+                        <label class="custom-control custom-radio">
+                          <input name="radio_size" type="radio" class="custom-control-input" checked>
+                          <span class="custom-control-indicator"></span>
+                          <span class="custom-control-description">Small - 100g ($9.99)</span>
+                        </label>
+                      </div>
+                      <div class="form-group">
+                        <label class="custom-control custom-radio">
+                          <input name="radio_size" type="radio" class="custom-control-input">
+                          <span class="custom-control-indicator"></span>
+                          <span class="custom-control-description">Medium - 200g ($14.99)</span>
+                        </label>
+                      </div>
+                      <div class="form-group">
+                        <label class="custom-control custom-radio">
+                          <input name="radio_size" type="radio" class="custom-control-input">
+                          <span class="custom-control-indicator"></span>
+                          <span class="custom-control-description">Large - 350g ($21.99)</span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+              <!-- Panel Details / Additions -->
+              <div class="panel-details">
+                <h5 class="panel-details-title">
+                  <label class="custom-control custom-radio">
+                    <input name="radio_title_additions" type="radio" class="custom-control-input">
+                    <span class="custom-control-indicator"></span>
+                  </label>
+                  <a href="#panelDetailsAdditions" data-toggle="collapse">Additions</a>
+                </h5>
+                <div id="panelDetailsAdditions" class="collapse">
+                  <div class="panel-details-content">
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <label class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input">
+                            <span class="custom-control-indicator"></span>
+                            <span class="custom-control-description">Tomato ($1.29)</span>
+                          </label>
+                        </div>
+                        <div class="form-group">
+                          <label class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input">
+                            <span class="custom-control-indicator"></span>
+                            <span class="custom-control-description">Ham ($1.29)</span>
+                          </label>
+                        </div>
+                        <div class="form-group">
+                          <label class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input">
+                            <span class="custom-control-indicator"></span>
+                            <span class="custom-control-description">Chicken ($1.29)</span>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <label class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input">
+                            <span class="custom-control-indicator"></span>
+                            <span class="custom-control-description">Cheese($1.29)</span>
+                          </label>
+                        </div>
+                        <div class="form-group">
+                          <label class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input">
+                            <span class="custom-control-indicator"></span>
+                            <span class="custom-control-description">Bacon ($1.29)</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Panel Details / Other -->
+              <div class="panel-details">
+                  <h5 class="panel-details-title">
+                      <label class="custom-control custom-radio">
+                          <input name="radio_title_other" type="radio" class="custom-control-input">
+                          <span class="custom-control-indicator"></span>
+                      </label>
+                      <a href="#panelDetailsOther" data-toggle="collapse">Other</a>
+                  </h5>
+                  <div id="panelDetailsOther" class="collapse">
+                      <textarea cols="30" rows="4" class="form-control" placeholder="Put this any other informations..."></textarea>
+                  </div>
+              </div>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
-              <button type="button" class="btn btn-primary submet-btn" data-dismiss="modal">تأكيد</button>
+            <div class="row">
+                <div class="col-md-6">
+
+                </div>
+            </div>
+            <h5 class="text-center text-muted">Order now!</h5>
+            <div class="product-price text-center"><?= $food->price;?><small><small><?= $restaurant->currency->icon;?></small></small></div>
+            <div class="row">
+                <div class="col-sm-6">
+                      <div class="form-group text-center">
+                        <input type="number" class="form-control input-qty form-control-lg" value="1">
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <button class="btn btn-outline-primary btn-lg btn-block"><span>Order</span></button>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <a href="menu-list-collapse.html" class="btn btn-link">Back to menu</a>
             </div>
           </div>
+          <h3 class="mt-5 mb-5 text-center">Reviews</h3>
+          <!-- Blockquote -->
+          <blockquote class="blockquote blockquote-lganimated" data-animation="fadeIn">
+              <div class="blockquote-content dark">
+                  <div class="rate rate-sm mb-3"><i class="fa fa-star active"></i><i class="fa fa-star active"></i><i class="fa fa-star active"></i><i class="fa fa-star active"></i><i class="fa fa-star active"></i></div>
+                  <p>The best paste I have ever ate in my entire life!</p>
+              </div>
+              <footer>
+                  <img src="http://assets.suelo.pl/soup/img/avatars/avatar03.jpg" alt="">
+                  <span class="name">Kate Hudson<span class="text-muted">, LinkedIn</span></span>
+              </footer>
+          </blockquote>
+          <!-- Blockquote -->
+          <blockquote class="blockquote blockquote-lganimated" data-animation="fadeIn">
+              <div class="blockquote-content dark">
+                  <div class="rate rate-sm mb-3"><i class="fa fa-star active"></i><i class="fa fa-star active"></i><i class="fa fa-star active"></i><i class="fa fa-star active"></i><i class="fa fa-star"></i></div>
+                  <p>Great food and great atmosphere!</p>
+              </div>
+              <footer>
+                  <img src="http://assets.suelo.pl/soup/img/avatars/avatar04.jpg" alt="">
+                  <span class="name">Kate Hudson<span class="text-muted">, LinkedIn</span></span>
+              </footer>
+          </blockquote>
         </div>
       </div>
-      <!-- End Popup Model -->
-
-    </figure>
-  </article>
-
-
-
-
+    </div>
   </div>
-</div>
+</section>

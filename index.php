@@ -12,33 +12,31 @@
 	session_start();
 
 	/* Initial The Cart */
-	$cart = new Cart();
-	$_SESSION["cart"] = $cart;
+	// $cart = new Cart();
+	// $_SESSION["cart"] = $cart;
 
-	/* Routing And Handling Requests */
+	/* ========== Routing And Handling Requests ==========*/
 	$router = new Router();
 
   $request_parse = parse_url($_SERVER["REQUEST_URI"]);
   $url = $router->restaurant_name($request_parse["path"]);
 
-	###### Get Restaurant Segneture ######
+	### Get Restaurant Segneture ###
 
   $restaurant = Restaurant::get_restaurant_by_name($router->restaurant_name);
 
-  if ($restaurant != false && is_object($restaurant) && get_class($restaurant) == "Restaurant") {
+  if (isset($restaurant) && !empty($restaurant) && is_object($restaurant) && get_class($restaurant) == "Restaurant") {
 
-
-    ###### Get Requests ######
+    ### Get Requests ###
 
     $router->get("/login", function () {
-
       include CONTROLLERS_URL . "login_controller.php";
 
       $login_controller = new LoginController();
-      $login_controller->run_action();
+      $login_controller->run_action("default");
     });
 
-    $router->get("/", function () {
+    $router->get("", function () {// Home is / === "" but most be "" to work
       // creatting a controller
       include CONTROLLERS_URL . "home_controller.php";
       $home_controller = new HomeController();
@@ -46,100 +44,86 @@
 
     });
 
-    $router->get("/cart", function () {
+    /*
+      $router->get("/cart", function () {
 
-      $view_data["foods"] 			= $_SESSION["cart"]->get_view_data();
-      $view_data["total_price"] = $_SESSION["cart"]->calculate_total();
-      $view_data["currency"] 		= $_SESSION["restaurant"]->currency;
-      $template = new Template();
-      $template->view("cart", $view_data);
+        $view_data["foods"] 			= $_SESSION["cart"]->get_view_data();
+        $view_data["total_price"] = $_SESSION["cart"]->calculate_total();
+        $view_data["currency"] 		= $_SESSION["restaurant"]->currency;
+        $template = new Template();
+        $template->view("cart", $view_data);
+
+      });
+    */
+
+    $router->get("/menu/{id}", function ($params) {
+
+      // creatting a controller
+      include CONTROLLERS_URL . "menu_controller.php";
+      global $restaurant;
+
+      $C = new MenuController();
+      $admin = Router::get_admin_session();
+
+      if (!empty($admin) && $admin->restaurant_id == $restaurant->id) {
+        $action = "edit";
+      }else {
+        $action = "default";
+      }
+
+      $C->run_action($action, $params["id"]);
+
+    });
+
+    $router->get("/menu/add", function () {
+
+      // creatting a controller
+      include MODELS_URL . "menu.php";
+      include CONTROLLERS_URL . "menu_controller.php";
+
+      $C = new MenuController();
+
+      $C->run_action("add");
 
     });
 
     $router->get("/logout", function () {
-
+      global $restaurant;
       // clear session and logout
       session_unset();
       session_destroy();
       session_write_close();
       setcookie(session_name(),'',0,'/');
-      header("Location: " . M_URL . "home");
+      header("Location: " . M_URL . $restaurant->url_name);
       exit();
 
     });
 
-    $router->get("/category/{id}", function ($id = NULL) {
-
-      // creatting a controller
-      include MODELS_URL . "category.php";
-      include CONTROLLERS_URL . "category_controller.php";
-      $category_controller = new CategoryController();
-
-      if ($id != NULL && is_numeric($id)) {
-        $category_controller->run_action("get_category", $id);
+    $router->get("/f/{id}", function ($params) {
+      include CONTROLLERS_URL . "food_controller.php";
+      $C = new FoodController();
+      $id = $params["id"];
+      if ($id != NULL) {
+        $C->run_action("default", $params["id"]);
       }else {
-        $category_controller->run_action();
+        header("Location: " . M_URL);
+        exit();
       }
 
     });
 
-    $router->get("/food/{id}", function ($params) {
-      include CONTROLLERS_URL . "food_controller.php";
-      $C = new FoodController();
-      $id = $params["id"];
-      // if ($id != NULL) {
-        $C->run_action("default", $params["id"]);
-      // }else {
-      // 	header("Location: " . M_URL);
-      // 	exit();
-      // }
 
-    });
-
-    $router->get("/manage/food/{id}/{param}", function ($id, $action) {
-
-      include CONTROLLERS_URL . "manage_food_controller.php";
-      $manage_controller = new manage_food_controller();
-      $manage_controller->run_action($action, $id);
-
-    });
-
-    $router->get("/manage/category/{id}/{param}", function ($id, $action) {
-
-      include CONTROLLERS_URL . "manage_category_controller.php";
-      $manage_controller = new manage_category_controller();
-      $manage_controller->run_action($action, $id);
-
-    });
-
-    $router->get("/manage/Restaurants", function () {
-
-      include CONTROLLERS_URL . "manage_Restaurants_controller.php";
-      $manage_controller = new manage_Restaurants_controller();
-      $manage_controller->run_action();
-
-    });
-
-    $router->get("/dashboard", function () {
-
-      include CONTROLLERS_URL . "dashboard_controller.php";
-      $dashboard_controller = new dashboard_controller();
-      $dashboard_controller->run_action();
-
-    });
-
-
-    ######  POST Requests  ######
+    ###  POST Requests  ###
 
     $router->post("/login", function ($data) {
 
       include CONTROLLERS_URL . "login_controller.php";
 
-      LoginController::login($data["username"], $data["pass"]);
+      $login_controller = new LoginController();
+      $login_controller->run_action("login", $data["username"], $data["password"]);
       exit();
 
     });
-
 
     $router->post("/manage/food/{param}", function ($post_data, $action) {
 
@@ -149,7 +133,8 @@
 
           include MODELS_URL . "manage.php";
 
-          $manage = new Manage($_SESSION["user"]->id);
+          $admin = Router::get_session_admin();
+          $manage = new Manage($admin->id);
 
           $res = $manage->delete_food(intval($post_data["food_id"]));
 
@@ -164,7 +149,7 @@
 
           include MODELS_URL . "manage.php";
 
-          $manage = new Manage($_SESSION["user"]->id);
+          $manage = new Manage($_SESSION["admin"]->id);
           $res = $manage->update_food($post_data, $_FILES);
           echo json_encode($res);
         }else {
@@ -174,13 +159,12 @@
 
     });
 
-
     $router->post("/manage/category/{param}", function ($post_data, $action) {
 
       if (isset($post_data["id"]) && is_numeric(intval($post_data["id"]))) {
 
         include MODELS_URL . "manage.php";
-        $manage = new Manage($_SESSION["user"]->id);
+        $manage = new Manage($_SESSION["admin"]->id);
 
         if ($action == "delete_category") {
           $res = $manage->delete_category(intval($post_data["id"]));
@@ -211,6 +195,21 @@
 
     });
 
+    $router->post("/menu/add", function ($info) {
+
+      include CONTROLLERS_URL . "menu_controller.php";
+      $C = new MenuController();
+      $C->run_action("insert", $info);
+
+    });
+
+    $router->post("/menu/edit", function ($info) {
+
+      include CONTROLLERS_URL . "menu_controller.php";
+      $C = new MenuController();
+      $C->run_action("update", $info);
+
+    });
 
     $router->add_404(function() {
       echo "<h1>404</h1>";
@@ -259,7 +258,7 @@
 
     $router->get("/api/category/{id}", function ($params = NULL) {
 
-    extract($params);
+      extract($params);
 
       $db = DBC::get_instance()->dbh;
 
@@ -291,17 +290,9 @@
   }else {
 
     echo "<h1>No Restaurant!!</h1>";
+    echo "<br><br>";
+    echo "<h1>food's Home Page Should Be Here</h1>";
 
   }
 
-
-	// $admin_page  = [
-	// 	"dashboard",
-	// 	"Restaurants"
-	// ];
-
-	// $operation_dirs  = [
-	// 	"category",
-	// 	"food",
-	// ];
 ?>

@@ -1,6 +1,6 @@
 <?php
 
-/* Controller class */
+  /* Controller class */
   class Controller {
 
     public function run_action($action = "default", ...$args) {
@@ -13,16 +13,16 @@
 
     protected function admin_check() {
 
-      if (!isset($_SESSION["user"]) || empty($_SESSION["user"])) {
+      if (!isset($_SESSION["admin"]) || empty($_SESSION["admin"])) {
         $temp = new Template("error", 2, true);
         $temp->view("login_error");
         exit();
       }else {
-				if (get_class($_SESSION["user"]) != "User") {
-					$temp = new Template("error", 2, true);
-					$temp->view("login_error");
-				}
-			}
+        if (get_class($_SESSION["admin"]) != "Admin") {
+          $temp = new Template("error", 2, true);
+          $temp->view("login_error");
+        }
+      }
 
     }
 
@@ -47,6 +47,10 @@
 
 		public function post($url, $handler) {
 			$this->add_handler(self::POST_METHOD, $url, $handler);
+		}
+
+		public function post_admin($url, $handler) {
+      $this->add_handler(self::POST_METHOD, $url, $handler, true/* admin check */);
 		}
 
 		protected function add_handler($method, $url, $handler, $admin_check = false) {
@@ -88,7 +92,7 @@
 			if (is_string($url_arr[1]) && strlen($url_arr[1]) > 3) {
 
 				$this->restaurant_name = $url_arr[1];
-				return str_replace($url_arr[1], "", $url);
+				return str_replace(implode("/", array_slice($url_arr, 0, 2)), "", $url);
 
 			}else {
 				return $url;
@@ -118,7 +122,6 @@
 		}
 
 		public function run($request_url, $is_admin = false) {
-
 			$method         = $_SERVER["REQUEST_METHOD"];
 			$callback = null;
 			$id = null;
@@ -153,14 +156,13 @@
 						}
 						continue;
 					}else if ($request_url == $handler["url"] && $handler["method"] == $method) {
-
+            // echo "<br>" . $request_url . "<br><br>";
 						$callback = $handler["handler"];
 
 					}
 				}else {
 					continue;
 				}
-				// echo "$i<br>";
 
 			}
 
@@ -206,14 +208,20 @@
 			}
 		}
 
-		public static function get_user() {
+		public static function set_admin_session($admin_data) {
 			if (!isset($_SESSION)) {
 				session_start();
 			}
-			if (isset($_SESSION["user"])) {
-				include_once MODELS_PATH . "user.php";
-				$user = $_SESSION["user"];
-				return unserialize(base64_decode($user));
+      $_SESSION["admin"] = base64_encode(serialize($admin_data));
+		}
+
+		public static function get_admin_session() {
+			if (!isset($_SESSION)) {
+				session_start();
+			}
+			if (isset($_SESSION["admin"])) {
+				// include_once MODELS_PATH . "admin.php";
+				return unserialize(base64_decode($_SESSION["admin"]));
 			}else {
 				return null;
 			}
@@ -223,11 +231,7 @@
 			if (!isset($_SESSION)) {
 				session_start();
 			}
-			if (isset($_SESSION[$name])) {
-				return true;
-			}else {
-				return false;
-			}
+			return isset($_SESSION[$name]);
 		}
 
 	}
@@ -250,9 +254,12 @@
 			}
 
 			if ($level > 1) {
-				include_once LAYOUT_PATH . "head.php";
+        include_once LAYOUT_PATH . "head.php";
 			}
+
 			if ($level == 3 || $level == 4 ) {
+        include_once MODELS_URL . "menu.php";
+        $header_menus = Menu::get_menus_list($restaurant->id, "id", "name");
 				include_once LAYOUT_PATH . "header.php";
 			}
 
@@ -263,36 +270,6 @@
 			}
 			if ($level > 1) {
 				include_once LAYOUT_PATH . "close.php";
-			}
-		}
-
-		public static function admin_view($page, $level = 3, $variables = null) {
-			/*
-				$page       => view page in /views/$page
-				$level      => require level [
-					1 => only the $page,
-					2 => $page with head and body close,
-					3 => $page with navbar,
-				]
-				$variables  => array of values to pass to the view
-			*/
-			if (!empty($variables)) {
-				extract($variables);
-			}
-
-			if ($level > 1) {
-				include_once LAYOUT_PATH . "dashboard_head.php";
-			}
-			if ($level == 3) {
-				include_once MODELS_PATH . "admin.php";
-				$admin = Admin::get_admin_session();
-				include_once LAYOUT_PATH . "dashboard_navabr.php";
-			}
-
-			include_once VIEW_PATH . $page . ".php";// include the actual $page
-
-			if ($level > 1) {
-				include_once LAYOUT_PATH . "dashboard_close.php";
 			}
 		}
 
@@ -502,7 +479,7 @@
 		public $ordered_count;
 	}
 
-	class User {
+	class Admin {
 		public $id;
 		public $username;
 		public $password;
