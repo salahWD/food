@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 23, 2022 at 04:33 PM
+-- Generation Time: Jan 09, 2023 at 05:22 PM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 8.0.2
 
@@ -43,7 +43,9 @@ INSERT INTO `categories` (`id`, `name`, `description`, `image`, `menu`) VALUES
 (2, 'fods', 'and this is an amercan food\r\n', 'http://localhost/food/img/categories/menu-title-sushi.jpg', 1),
 (4, 'americany', 'and this is an amercan food&#13;&#10;', 'http://localhost/food/img/categories/menu-title-pizza.jpg', 1),
 (13, 'ITALYAN', 'this is a italyan foods', 'http://localhost/food/img/categories/menu-title-pasta.jpg', 1),
-(32, 'Burgers', 'this is a Burger foods', 'http://localhost/food/img/categories/menu-title-desserts.jpg', 1);
+(32, 'Burgers', 'this is a Burger foods', 'http://localhost/food/img/categories/menu-title-desserts.jpg', 1),
+(64, 'cat toassd2', '', 'http://food.test/img/categories/rlux085b5bef3f2a.jpg', 56),
+(69, 'my cateee', '', 'http://food.test/img/categories/rlwdgf9e3b3a67c2.jpg', 56);
 
 -- --------------------------------------------------------
 
@@ -91,7 +93,10 @@ INSERT INTO `foods` (`id`, `name`, `price`, `description`, `image`, `category`) 
 (4, 'Quisque et felis eros\r\n', 12, 'Nam in suscipit nisi, sit amet consectetur metus. Ut sit amet tellus accumsan\r\n\r\n', 'http://localhost/food/img/foods/04.jpg', 4),
 (8, 'Pot Appetizers', 45, 'The best part about the Instant Pot is that it\'s basically foolproof. Drop in the ingredients, ', 'http://localhost\\food\\img/foods/rdj3cxb4c1421771.jpg', 13),
 (9, 'Veggie Sandwich', 55, 'Listen I love sandwiches, especially those that have meat in them (see my obsession with the iconic', 'http://localhost\\food\\img/foods/rdj3d4bfc093510a.jpg', 4),
-(10, 'Pancakes', 25, 'type of candies but it is very good and had a 5 start as a rate from USF', 'http://localhost\\food\\img/foods/rdj3db8bffc7f62b.jpeg', 13);
+(10, 'Pancakes', 25, 'type of candies but it is very good and had a 5 start as a rate from USF', 'http://localhost\\food\\img/foods/rdj3db8bffc7f62b.jpeg', 13),
+(42, 'pizzzaa marchleno', 3, 'lorem Ipsum Some Words For Testing', 'http://food.test/img/foods/default.jpg', 64),
+(43, 'alot of foods', 10, 'lorem Ipsum Some Words For Testing', 'http://food.test/img/foods/default.jpg', 69),
+(51, 'testing food', 20, 'lorem Ipsum Some Words For Testing', 'http://food.test/img/foods/default.jpg', 69);
 
 -- --------------------------------------------------------
 
@@ -113,7 +118,7 @@ CREATE TABLE `menus` (
 
 INSERT INTO `menus` (`id`, `name`, `description`, `image`, `restaurant`) VALUES
 (1, 'sanabel ramazan menu', 'test descrtiption', 'http://localhost/food/img/menus/default-ramadan.jpg', 1),
-(2, 'sanabel main menu', 'lorem description', 'http://localhost/food/img/menus/default.jpg', 1);
+(56, 'testing menu', 'testing description for menu', 'http://food.test/img/menus/ro82s4ecf62732f7.jpg', 1);
 
 -- --------------------------------------------------------
 
@@ -129,6 +134,7 @@ CREATE TABLE `restaurants` (
   `logo_secondary` varchar(255) DEFAULT NULL,
   `number` varchar(255) NOT NULL,
   `whatsapp` varchar(255) NOT NULL,
+  `instagram` varchar(255) NOT NULL,
   `order_msg` varchar(255) NOT NULL,
   `address` varchar(255) NOT NULL,
   `currency` int(11) NOT NULL
@@ -138,9 +144,9 @@ CREATE TABLE `restaurants` (
 -- Dumping data for table `restaurants`
 --
 
-INSERT INTO `restaurants` (`id`, `name`, `url_name`, `logo`, `logo_secondary`, `number`, `whatsapp`, `order_msg`, `address`, `currency`) VALUES
-(1, 'sanabel', 'sanabel', 'http://localhost\\food\\img\\logos\\resm-logo.svg', 'http://localhost\\food\\img\\logos\\resm-logo-white.svg', '009055271885', '009055271885', 'hey! i like to order ( ## ) wich cost foodprice how much time will it take?', 'esenyurt meydan', 2),
-(2, 'empty R', 'empty-R', 'default.jpg', NULL, '05434344522', '05434344522', 'hi i want to oerder', 'saudi arabia', 1);
+INSERT INTO `restaurants` (`id`, `name`, `url_name`, `logo`, `logo_secondary`, `number`, `whatsapp`, `instagram`, `order_msg`, `address`, `currency`) VALUES
+(1, 'sanabel', 'sanabel', 'http://localhost\\food\\img\\logos\\resm-logo.svg', 'http://localhost\\food\\img\\logos\\resm-logo-white.svg', '00905527188570', '00905527188570', '', 'hey! i like to order ( ## ) wich cost foodprice how much time will it take?', 'esenyurt meydan', 2),
+(2, 'empty R', 'empty-R', 'default.jpg', NULL, '05434344522', '05434344522', '', 'hi i want to oerder', 'saudi arabia', 1);
 
 -- --------------------------------------------------------
 
@@ -173,7 +179,6 @@ INSERT INTO `users` (`id`, `username`, `password`, `permission`, `restaurant_id`
 --
 ALTER TABLE `categories`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `name` (`name`),
   ADD KEY `menu_category` (`menu`);
 
 --
@@ -218,7 +223,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
 
 --
 -- AUTO_INCREMENT for table `currencies`
@@ -230,13 +235,13 @@ ALTER TABLE `currencies`
 -- AUTO_INCREMENT for table `foods`
 --
 ALTER TABLE `foods`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT for table `menus`
 --
 ALTER TABLE `menus`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT for table `restaurants`
