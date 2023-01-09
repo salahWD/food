@@ -25,7 +25,7 @@
   <div class="container">
     <div class="col-lg-5 col-md-9">
       <div class="rate mb-5 rate-lg"><i class="fa fa-star active"></i><i class="fa fa-star active"></i><i class="fa fa-star active"></i><i class="fa fa-star active"></i><i class="fa fa-star"></i></div>
-      <h1 class="display-2">Why <strong>our</strong> Burgers?</h1>
+      <h1 class="display-2">Why <strong>our</strong> food?</h1>
       <p class="lead text-muted mb-5">Donec a eros metus. Vivamus volutpat leo dictum risus ullamcorper condimentum. Cras sollicitudin varius condimentum. Praesent a dolor sem....</p>
       <!-- Feature -->
       <div class="feature feature-1">

@@ -113,3 +113,15 @@ input.food-price {
 .price {
   font-size: 16px;
 }
+.btns-flow-right {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  z-index: 1;
+  margin-right: 2rem;
+  padding-left: 0;
+  right: 0%;
+  top: 45%;
+  transform: translateY(-50%);
+}

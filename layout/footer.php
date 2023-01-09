@@ -6,26 +6,23 @@
                 <!-- Footer 1st Row -->
                 <div class="footer-first-row row">
                     <div class="col-lg-3 text-center">
-                        <a href="index.html"><img src="<?= $restaurant->logo_secondary ?? $restaurant->logo;?>" alt="" width="88" class="mt-5 mb-5"></a>
+                        <a href="<?= Router::route($restaurant->url_name);?>"><img src="<?= $restaurant->logo_secondary ?? $restaurant->logo;?>" alt="" width="88" class="mt-5 mb-5"></a>
                     </div>
-                    <div class="col-lg-4 col-md-6">
-                        <h5 class="text-muted">Latest news</h5>
-                        <ul class="list-posts">
-                            <li>
-                                <a href="blog-post.html" class="title">How to create effective webdeisign?</a>
-                                <span class="date">February 14, 2015</span>
-                            </li>
-                            <li>
-                                <a href="blog-post.html" class="title">Awesome weekend in Polish mountains!</a>
-                                <span class="date">February 14, 2015</span>
-                            </li>
-                            <li>
-                                <a href="blog-post.html" class="title">How to create effective webdeisign?</a>
-                                <span class="date">February 14, 2015</span>
-                            </li>
-                        </ul>
+                    <div class="col-lg-4 col-md-6 d-flex flex-column justify-content-center">
+                      <h5 class="text-muted mb-3">Social Media</h5>
+                      <ul class="unstyled-list row-list" style="gap: 1rem;">
+                        <?php if (isset($restaurant->facebook) && is_string($restaurant->facebook) && strlen($restaurant->facebook) > 1):?>
+                          <li><a href="#" class="icon icon-social icon-circle icon-sm icon-facebook"><i class="fa fa-facebook"></i></a></li>
+                        <?php endif;?>
+                        <?php if (isset($restaurant->whatsapp) && is_string($restaurant->whatsapp) && strlen($restaurant->whatsapp) > 1):?>
+                          <li><a target="_blank" href="https://wa.me/<?= $restaurant->whatsapp; ?>?text=مرحبا, لقد رأيت موقعكم وأريد ان اعرف المزيد عنكم" class="icon icon-social icon-circle icon-sm icon-success"><i class="fa fa-whatsapp"></i></a></li>
+                        <?php endif;?>
+                        <?php if (isset($restaurant->instagram) && is_string($restaurant->instagram) && strlen($restaurant->instagram) > 1):?>
+                          <li><a href="https://instagram.com/<?= $restaurant->instagram;?>" class="icon icon-social icon-circle icon-sm icon-instagram"><i class="fa fa-instagram"></i></a></li>
+                        <?php endif;?>
+                      </ul>
                     </div>
-                    <div class="col-lg-5 col-md-6">
+                    <div class="col-lg-5 col-md-6 d-flex flex-column justify-content-center">
                         <h5 class="text-muted">Subscribe Us!</h5>
                         <!-- MailChimp Form -->
                         <form action="//suelo.us12.list-manage.com/subscribe/post-json?u=ed47dbfe167d906f2bc46a01b&amp;id=24ac8a22ad" id="sign-up-form" class="sign-up-form validate-form mb-5" method="POST" novalidate="novalidate">
@@ -42,17 +39,11 @@
                                 </span>
                             </div>
                         </form>
-                        <h5 class="text-muted mb-3">Social Media</h5>
-                        <a href="#" class="icon icon-social icon-circle icon-sm icon-facebook"><i class="fa fa-facebook"></i></a>
-                        <a href="#" class="icon icon-social icon-circle icon-sm icon-google"><i class="fa fa-google"></i></a>
-                        <a href="#" class="icon icon-social icon-circle icon-sm icon-twitter"><i class="fa fa-twitter"></i></a>
-                        <a href="#" class="icon icon-social icon-circle icon-sm icon-youtube"><i class="fa fa-youtube"></i></a>
-                        <a href="#" class="icon icon-social icon-circle icon-sm icon-instagram"><i class="fa fa-instagram"></i></a>
                     </div>
                 </div>
                 <!-- Footer 2nd Row -->
                 <div class="footer-second-row">
-                    <span class="text-muted">Copyright Res-M 2022&copy;. Made with love by SS.</span>
+                    <span class="text-muted">Copyright Res-M 2023&copy;. Made with love by SS.</span>
                 </div>
             </div>
 

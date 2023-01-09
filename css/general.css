@@ -1,0 +1,24 @@
+.unstyled-list {
+  list-style: none;
+  padding: 0;
+}
+.row-list {
+  display: flex;
+}
+#footer .footer-first-row{
+  padding-top:2rem;
+  padding-bottom:0rem;
+}
+.nav-main {
+  gap: 1.5rem;
+}
+.nav-main>li:not(:last-child) {
+  margin-right: auto;
+}
+.menu-sample .image {
+  object-fit: cover;
+  aspect-ratio: 7/6;
+}
+.icon:not(:hover) {
+  background-color: #3e4043 !important;
+}

@@ -107,6 +107,7 @@
           $variables["header_class"]  = "light";// header class => default: transparent absolute
           $variables["custom_css"]    = "menu";
           $variables["custom_js"]     = "add_menu";
+          $variables["custom_js"]     = "manage_menu";
           $variables["restaurant"]    = $restaurant;
           $variables["categories"]    = Menu::get_categories($id);
 
@@ -122,7 +123,7 @@
 
     }
 
-    /*  update menu data  */
+    /*  update menu  */
     public function update_action($params) {
 
       global $restaurant;
@@ -132,22 +133,69 @@
 
       if (!empty($admin)) {
 
-        $menu = new Menu();
-        $menu->id = $params["menu_id"];
 
-        if ($menu->has_access($admin->id)) {
+        if (isset($params["name"]) && isset($params["desc"]) && isset($params["image"]) && isset($params["menu_id"])) {
+          $menu = new Menu();
+          $menu->id = $params["menu_id"];
+          if ($menu->has_access($admin->id)) {
 
-          $cat_imgs = [];
-          foreach($params as $i => $post) {
-            if (substr_count($i, "cat-") > 0) {
-              $cat_imgs[$i] = $post;
+            $cat_imgs = [];
+            foreach($params as $i => $post) {
+              if (substr_count($i, "cat-") > 0) {
+                $cat_imgs[$i] = $post;
+              }
             }
-          }
 
-          $res = $menu->update_menu($admin->id, $params["name"], $params["desc"], $params["image"], json_decode($params["categories"]), $cat_imgs);
-          echo json_encode(["success" => $res]);
+            $deleted_cats = isset($params["deleted-categories"]) ? json_decode($params["deleted-categories"]) : [];
+            if (count($deleted_cats) > 0) {
+              $menu->delete_category($deleted_cats);
+            }
+
+            $deleted_foods = isset($params["deleted-foods"]) ? json_decode($params["deleted-foods"]) : [];
+            if (count($deleted_foods) > 0) {
+              $menu->delete_foods($deleted_foods);
+            }
+
+            $res = $menu->update_menu($admin->id, $params["name"], $params["desc"], $params["image"], json_decode($params["categories"]), $cat_imgs);
+
+            echo json_encode(["success" => $res]);
+          }else {
+            echo json_encode(["success" => false, "error" => "no access"]);
+          }
         }else {
-          echo json_encode(["success" => false, "error" => "no access"]);
+          echo json_encode(["success" => false, "error" => "invalid params"]);
+        }
+
+      }else {
+        echo json_encode(["success" => false, "error" => "no admin permission"]);
+      }
+      exit();
+
+    }
+
+    /*  delete menu  */
+    public function delete_action($params) {
+
+      global $restaurant;
+
+      include_once MODELS_URL . "menu.php";
+      $admin = Router::get_admin_session();
+
+      if (!empty($admin)) {
+
+        if (isset($params["menu_id"]) && !empty($params["menu_id"])) {
+          $menu = new Menu();
+          $menu->id = intval($params["menu_id"]);
+          if ($menu->has_access($admin->id)) {
+
+            $res = $menu->delete_menu();
+
+            echo json_encode(["success" => $res]);
+          }else {
+            echo json_encode(["success" => false, "error" => "no access"]);
+          }
+        }else {
+          echo json_encode(["success" => false, "error" => "invalid params"]);
         }
 
       }else {

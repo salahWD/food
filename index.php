@@ -164,7 +164,9 @@
       if (isset($post_data["id"]) && is_numeric(intval($post_data["id"]))) {
 
         include MODELS_URL . "manage.php";
-        $manage = new Manage($_SESSION["admin"]->id);
+
+        $admin = Router::get_session_admin();
+        $manage = new Manage($admin->id);
 
         if ($action == "delete_category") {
           $res = $manage->delete_category(intval($post_data["id"]));
@@ -208,6 +210,14 @@
       include CONTROLLERS_URL . "menu_controller.php";
       $C = new MenuController();
       $C->run_action("update", $info);
+
+    });
+
+    $router->post("/menu/delete", function ($info) {
+
+      include CONTROLLERS_URL . "menu_controller.php";
+      $C = new MenuController();
+      $C->run_action("delete", $info);
 
     });
 

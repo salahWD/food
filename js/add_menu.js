@@ -1,5 +1,5 @@
 /* ========= Constants ========= */
-const ImageMaxSize = 4 * 1024 * 1024;
+const ImageMaxSize = 4 * 1024 * 1024;// maximum image size
 
 /* ========= Functions ========= */
 async function postData(url = '', data = {}) {
@@ -58,9 +58,9 @@ function editImageBtn(btn, input, viewerEl, maxSize = null) {
   });
 }
 
-let handler;// save a position in memory to delete event listeners after saving it in this memory
+let handler;// save a position in memory for deleting event listeners after saving them in this variable
 
-function deletableElement(deletBtn, target, selectors = false) {// selectors => will you pass an elements or selectors by default its selectors
+function deletableElement(deletBtn, target, selectors = false) {// selectors => [false = DOM element True = selectors] by default its selectors
 
   if (!selectors) {
     deletBtn = document.querySelector(deletBtn);
@@ -290,6 +290,20 @@ let categorieEls = document.querySelectorAll(".menu-category[id^=\"cat-\"]");
 categorieEls.forEach(cat => {
   editImageBtn(`#${cat.id} .image-btn`, `#${cat.id} .imageInput`, `#${cat.id} .bg-image`, ImageMaxSize);// 4 * 1024 * 1024
   deletableElement(`#${cat.id} .delete-cat`, `#${cat.id}`);
+  let addFoodBtn = cat.querySelector(".add-food");
+  addFoodBtn.addEventListener("click", function () {
+    cat.querySelector(".menu-category-content").appendChild(createFoodElement({
+      id: `food-${cat.querySelectorAll(".food-item").length + 1}`,
+      name: "new Food",
+      // image: "http://localhost/food/img/categories/default.jpg",
+      description: "lorem Ipsum Some Words For Testing",
+      price: 10,
+    }));
+  });
+  cat.querySelectorAll(".menu-category-content .menu-item").forEach(el => {
+
+    deletableElement(el.querySelector(".delete-btn"), el, true);
+  });
 });
 
 /* ========= Add Category Section ========= */
@@ -313,7 +327,7 @@ addCategoryBtn.addEventListener("click", function () {
 
 });
 
-/* ========= Add Btn ========= */
+/* ========= Submit Btn ========= */
 const submitBtn = document.getElementById("submitBtn");
 submitBtn.addEventListener("click", function () {
 
@@ -326,7 +340,7 @@ submitBtn.addEventListener("click", function () {
   let descCheckResult = checkInput(editableDesc.innerText, "Description of food");
   let categories = document.querySelectorAll(`.menu-category:not(.deleted)`);
 
-
+  /* ==== Menu Check ==== */
   if (titleCheckResult.success) {
     editableTitle.classList.remove("wrong");
   }else {
@@ -361,8 +375,7 @@ submitBtn.addEventListener("click", function () {
     }
   }
 
-  /* ==== categories checks ====  */
-
+  /* ==== Categories Checks ====  */
   let catsInfo = {};
 
   if (categories.length > 0) {
@@ -481,8 +494,29 @@ submitBtn.addEventListener("click", function () {
 
   }
 
-  /* ==== After Check Stage ====  */
+  /* ==== Sending Stage ====  */
+  let deletedCats = [];
+  let deletedCatsEl = document.querySelectorAll(".menu-category.deleted");
+  if (deletedCatsEl.length > 0) {
+    deletedCatsEl.forEach(el => {
+      if (Number(el.dataset.id) > 0) {
+        deletedCats.push(el.dataset.id);
+      }
+    });
+    form.set("deleted-categories", JSON.stringify(deletedCats));
+  }
+  let deletedFoods = [];
+  let deletedFoodsEl = document.querySelectorAll(".menu-category:not(.deleted) .food-item.deleted");
+  if (deletedFoodsEl.length > 0) {
+    deletedFoodsEl.forEach(el => {
+      if (Number(el.dataset.id) > 0) {
+        deletedFoods.push(el.dataset.id);
+      }
+    });
+    form.set("deleted-foods", JSON.stringify(deletedFoods));
+  }
 
+  /* ==== Sending Stage ====  */
   if (errors.length == 0) {
 
     this.classList.add("btn-success");
@@ -507,9 +541,11 @@ submitBtn.addEventListener("click", function () {
         console.log(result);
         if (result.success) {
           console.log("All Done");
-          // window.setTimeout(() => {// time for (success animation) to show up
-          //   window.location.href = window.location.href.split("/").slice(0, -2).join("/");
-          // }, 1500);
+          if (this.dataset.action == "edit") {
+            window.location.href = window.location.href;
+          }else {
+            window.location.href = window.location.href.split("/").slice(0, -2).join("/");
+          }
         }else {
           console.log("not accepted");
         }

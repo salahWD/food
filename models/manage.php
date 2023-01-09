@@ -380,16 +380,20 @@ class Manage {
   }
 
   public static function upload_img($image, $url) {
-    $img_name_array = explode(".", $image["name"]);
-    $ext = end($img_name_array);
-    if (in_array($ext, ["jpg", "png", "jpeg"])) {
-      if ($image["size"] <= (4 * 1024 * 1024)) {
-        $image_name = self::generate_img_name($ext);
+    if (isset($image["name"]) && !empty($image["name"])) {
+      $img_name_array = explode(".", $image["name"]);
+      $ext = end($img_name_array);
+      if (in_array($ext, ["jpg", "png", "jpeg"])) {
+        if ($image["size"] <= (4 * 1024 * 1024)) {
+          $image_name = self::generate_img_name($ext);
 
-        $result = move_uploaded_file($image["tmp_name"], $url . $image_name);
-        $dir = basename($url);
-        if ($result) {
-          return Router::route("img/$dir/$image_name");
+          $result = move_uploaded_file($image["tmp_name"], $url . $image_name);
+          $dir = basename($url);
+          if ($result) {
+            return Router::route("img/$dir/$image_name");
+          }else {
+            return null;
+          }
         }else {
           return null;
         }

@@ -14,8 +14,11 @@
       </div>
       <div class="col-md-9">
         <!-- Navigation -->
-        <nav class="module module-navigation left mr-4">
-          <ul id="nav-main" class="nav nav-main">
+        <div class="module right">
+          <a href="http://wa.me/<?= $restaurant->whatsapp;?>" class="btn btn-primary"><span>Order</span></a>
+        </div>
+        <nav class="module module-navigation right mr-4">
+          <ul id="nav-main" class="nav nav-main flex-row-reverse">
             <li><a href="<?= Router::route($restaurant->url_name);?>">Home</a></li>
             <?php if (isset($header_menus) && is_array($header_menus) && count($header_menus) > 0):?>
               <li class="has-dropdown">
@@ -32,13 +35,10 @@
                 </div>
               </li>
             <?php endif;?>
-            <li><a href="page-offers.html">Offers</a></li>
-            <li><a href="page-contact.html">Contact</a></li>
+            <li><a href="<?= Router::route($restaurant->url_name);?>">Offers</a></li>
+            <li><a href="<?= Router::route($restaurant->url_name);?>">Contact</a></li>
           </ul>
         </nav>
-        <div class="module left">
-          <a href="http://wa.me/<?= $restaurant->whatsapp;?>" class="btn btn-primary"><span>Order</span></a>
-        </div>
       </div>
       <!-- <div class="col-md-2">
           <a href="#" class="module module-cart right" data-toggle="panel-cart">

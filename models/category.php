@@ -42,6 +42,43 @@ class Category {
 
   }
 
+  public static function insert_category($cat_name, $cat_image, $menu, $foods) {
+
+    if ($cat_image == null) {
+      $cat_image = Router::route("img/categories/default.jpg");
+    }
+
+    $db = DBC::get_instance();
+    $sql = $db->dbh->prepare(
+      "INSERT INTO categories (name, image, menu) VALUES (:name, :image, :menu)");
+    $res =$sql->execute([
+      ":name"   => $cat_name,
+      ":image"  => $cat_image,
+      ":menu"   => $menu
+    ]);
+
+    if ($res) {
+      $cat_id = $db->dbh->lastInsertId();
+      if (is_array($foods) && count($foods) > 0) {
+
+        foreach ($foods as $food) {
+
+          $sql = $db->dbh->prepare("INSERT INTO foods (name, price, description, image, category) VALUES (:name, :price, :desc, :img, :cat)");
+          $sql->execute([
+            ":name"   => $food->name,
+            ":price"  => $food->price,
+            ":desc"   => $food->desc,
+            ":img"   => Router::route("img/foods/default.jpg"),
+            ":cat"    => $cat_id
+          ]);
+        }
+      }
+    }
+
+    return $res;
+
+  }
+
 }
 
 

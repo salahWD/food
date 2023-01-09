@@ -29,9 +29,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <!-- CSS Styles -->
-    <link href="<?php echo CSS_URL;?>core.css" rel="stylesheet" />
-    <link href="<?php echo CSS_URL;?>theme-red.css" rel="stylesheet" />
-      <?php if (isset($custom_css) && $custom_css != NULL):?>
+    <link href="<?php echo CSS_URL;?>core.css" rel="stylesheet" /><!-- Core Css -->
+    <link href="<?php echo CSS_URL;?>theme-red.css" rel="stylesheet" /><!-- Theme: Colors and Variables -->
+    <link href="<?php echo CSS_URL;?>general.css" rel="stylesheet" /><!-- Global Styles -->
+      <?php if (isset($custom_css) && $custom_css != NULL):?><!-- Specific Styles For Page -->
         <?php if (is_array($custom_css)):?>
           <?php foreach($custom_css as $css):?>
             <link href="<?php echo CSS_URL;?><?php echo $css;?>.css" rel="stylesheet" />

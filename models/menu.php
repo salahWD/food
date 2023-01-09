@@ -112,51 +112,48 @@ class Menu {
     if ($this->description == null) {
       $errors[] = "menu description is invalid!";
     }
-
-    if (is_array($cat_imgs) && count($cat_imgs) > 0) {
-
-      foreach ($cat_imgs as $id => $img) {
-        $img_name = Manage::upload_img($img, IMAGES_PATH . "categories/");
-        $categories->$id->image = $img_name ?? Router::route("img/categories/default.jpg");
-      }
+    if (isset($image) && !empty($image)) {
+      $this->image = Manage::upload_img($image, IMAGES_PATH . "menus/") ?? $this->image;
     }
 
-    if (is_array($categories) && count($categories) > 0) {
+    foreach($categories as $i => $cat) {
 
-      foreach($categories as $cat) {
+      if ($cat != null) {
 
-        if ($cat != null) {
+        $cat->name = Manage::check_text($cat->name, 4) ?? null;
 
-          $cat->name = Manage::check_text($cat->name, 4);
-
-          if ($cat->name == null) {
-            $errors[] = "category name is invalid!";
+        if ($cat->name == null) {
+          $errors[] = "category name is invalid!";
+        }
+        if (isset($cat_imgs[$i]) && !empty($cat_imgs[$i])) {
+          $cat->image = Manage::upload_img($cat_imgs[$i], IMAGES_PATH . "categories/");
+          if ($cat->image == null) {// http://food.test/sanabel/img/categories/image.jpg
+            $cat->image = Router::route("img/categories/default.jpg");
           }
-          if (!is_string($cat->image) || strlen($cat->image) < 20) {// 20 => https://food.test/img/categories/img_name.jpg
-            $errors[] = "category image is invalid!";
-          }
+        }else {
+          $cat->image = Router::route("img/categories/default.jpg");
+        }
 
-          if (isset($cat->foods) && count($cat->foods) > 0) {
-            foreach ($cat->foods as $food) {
-              $food->name = Manage::check_text($food->name, 4);
-              $food->desc = Manage::check_text($food->desc, 4);
+        if (isset($cat->foods) && count($cat->foods) > 0) {
+          foreach ($cat->foods as $food) {
+            $food->name = Manage::check_text($food->name, 4) ?? null;
+            $food->desc = Manage::check_text($food->desc, 4) ?? null;
 
-              if ($food->name == null) {
-                $errors[] = "food name is invalid!";
-              }
-              if ($food->desc == null) {
-                $errors[] = "food description is invalid!";
-              }
-              if (!is_numeric(intval($food->price)) || intval($food->price) < 0) {
-                $errors[] = "food price is invalid!";
-              }
+            if ($food->name == null) {
+              $errors[] = "food name is invalid!";
             }
-
+            if ($food->desc == null) {
+              $errors[] = "food description is invalid!";
+            }
+            if (!isset($food->price) || !is_numeric(intval($food->price)) || intval($food->price) < 0) {
+              $errors[] = "food price is invalid!";
+            }
           }
 
         }
 
       }
+
     }
 
     /* ==== insert / save ==== */
@@ -172,38 +169,33 @@ class Menu {
         ":rest"   => $restaurant->id
       ]);
 
-      if (is_array($categories) && count($categories) > 0) {
+      $menu_id = $db->dbh->lastInsertId();
+      foreach ($categories as $i => $cat) {
 
-        $menu_id = $db->dbh->lastInsertId();
-        foreach ($categories as $cat) {
+        $sql = $db->dbh->prepare("INSERT INTO categories (name, image, menu) VALUES (:name, :image, :menu)");
+        $result = $sql->execute([
+          ":name"   => $cat->name,
+          ":image"  => $cat->image,
+          ":menu"   => $menu_id
+        ]);
+        $cat_id = $db->dbh->lastInsertId();
 
-          $image = $cat->image ?? Router::route("img/categories/default.jpg");
+        if (is_array($cat->foods) && count($cat->foods) > 0) {
 
-          $sql = $db->dbh->prepare("INSERT INTO categories (name, image, menu) VALUES (:name, :image, :menu)");
-          $result = $sql->execute([
-            ":name"   => $cat->name,
-            ":image"  => $image,
-            ":menu"   => $menu_id
-          ]);
-          $cat_id = $db->dbh->lastInsertId();
+          foreach ($cat->foods as $food) {
 
-          if (count($cat->foods) > 0) {
-
-            foreach ($cat->foods as $food) {
-
-              $sql = $db->dbh->prepare("INSERT INTO foods (name, price, description, image, category) VALUES (:name, :price, :desc, :img, :cat)");
-              $result = $sql->execute([
-                ":name"   => $food->name,
-                ":price"  => $food->price,
-                ":desc"   => $food->desc,
-                ":img"   => Router::route("img/foods/default.jpg"),
-                ":cat"    => $cat_id
-              ]);
-            }
-
+            $sql = $db->dbh->prepare("INSERT INTO foods (name, price, description, image, category) VALUES (:name, :price, :desc, :img, :cat)");
+            $result = $sql->execute([
+              ":name"   => $food->name,
+              ":price"  => $food->price,
+              ":desc"   => $food->desc,
+              ":img"   => Router::route("img/foods/default.jpg"),
+              ":cat"    => $cat_id
+            ]);
           }
 
         }
+
       }
 
       return $result;
@@ -243,7 +235,6 @@ class Menu {
     global $restaurant;
     $this->name         = Manage::check_text($name, 2);
     $this->description  = Manage::check_text($desc, 2);
-    $this->image        = Router::route("img/menus/default.jpg");
     $errors             = [];
 
     /* ==== check ==== */
@@ -256,16 +247,11 @@ class Menu {
     if ($this->description == null) {
       $errors[] = "menu description is invalid!";
     }
-
-    if (is_array($cat_imgs) && count($cat_imgs) > 0) {
-
-      foreach ($cat_imgs as $id => $img) {
-        $img_name = Manage::upload_img($img, IMAGES_PATH . "categories/");
-        $categories->$id->image = $img_name ?? Router::route("img/categories/default.jpg");
-      }
+    if (isset($image) && !empty($image)) {
+      $this->image = Manage::upload_img($image, IMAGES_PATH . "menus/");
     }
 
-    foreach($categories as $cat) {
+    foreach($categories as $i => $cat) {
 
       if ($cat != null) {
 
@@ -274,26 +260,33 @@ class Menu {
         if ($cat->name == null) {
           $errors[] = "category name is invalid!";
         }
-        if (isset($cat->id) && intval($cat->id) > 0) {
-          if (isset($cat->image)) {
-            if (!is_string($cat->image) || strlen($cat->image) < 20) {// 20 => https://food.test/img/categories/img_name.jpg
-              $errors[] = "category image is invalid!";
+
+        if (isset($cat->id) && is_numeric(intval($cat->id)) && intval($cat->id) > 0) {// update cateogry
+          if (isset($cat_imgs[$i]) && !empty($cat_imgs[$i])) {// update category with new image
+            $cat->image = Manage::upload_img($cat_imgs[$i], IMAGES_PATH . "categories/");
+            if ($cat->image == null) {
+              $cat->image = Router::route("img/categories/default.jpg");
             }
           }
         }else {
-          if (isset($cat->image)) {
-            if (!is_string($cat->image) || strlen($cat->image) < 20) {// 20 => https://food.test/img/categories/img_name.jpg
-              $errors[] = "category image is invalid!";
+          if (isset($cat_imgs[$i]) && !empty($cat_imgs[$i])) {// new category with an image
+            $cat->image = Manage::upload_img($cat_imgs[$i], IMAGES_PATH . "categories/");
+            if ($cat->image == null) {
+              $cat->image = Router::route("img/categories/default.jpg");
             }
-          }else {
+          }else {// new category with no image
             $cat->image = Router::route("img/categories/default.jpg");
           }
         }
 
-        if (isset($cat->foods) && count($cat->foods) > 0) {
+        if (!isset($cat->id) && (!isset($cat->image) || !is_string($cat->image) || strlen($cat->image) < 20)) {// 20 => https://food.test/img/categories/img_name.jpg
+          $errors[] = "category image is invalid!";
+        }
+
+        if (isset($cat->foods) && is_array($cat->foods) && count($cat->foods) > 0) {
           foreach ($cat->foods as $food) {
-            $food->name = Manage::check_text($food->name, 4);
-            $food->desc = Manage::check_text($food->desc, 4);
+            $food->name = Manage::check_text($food->name, 4) ?? null;
+            $food->desc = Manage::check_text($food->desc, 4) ?? null;
 
             if ($food->name == null) {
               $errors[] = "food name is invalid!";
@@ -318,15 +311,22 @@ class Menu {
       $db = DBC::get_instance();
 
       /* update menu data */
-      $sql = $db->dbh->prepare(
-        "UPDATE menus SET
-        name = :name, description = :desc, image = :image WHERE id = :id");
-      $result = $sql->execute([
+
+      $image_on = "";
+      $exec = [
         ":name"   => $this->name,
         ":desc"   => $this->description,
-        ":image"  => $this->image,
         ":id"     => $this->id
-      ]);
+      ];
+
+      if (isset($this->image) && is_string($this->image) && strlen($this->image) > 20) {
+        $image_on = ", image = :image";
+        $exec[":image"] = $this->image;
+      }
+
+      $sql = $db->dbh->prepare(
+        "UPDATE menus SET name = :name, description = :desc $image_on WHERE id = :id");
+      $result = $sql->execute($exec);
 
       /* get accessed categories */
       $sql = $db->dbh->prepare(
@@ -339,7 +339,8 @@ class Menu {
       $accessed_cats = $sql->fetchAll(PDO::FETCH_COLUMN, 0);
 
       foreach ($categories as $cat) {
-        if (isset($cat->id) && !empty($cat->id) && intval($cat->id) > 0 ) {
+
+        if (isset($cat->id) && !empty($cat->id) && intval($cat->id) > 0 ) {// update category
           if (in_array($cat->id, $accessed_cats)) {
 
             $image_on = "";
@@ -348,8 +349,8 @@ class Menu {
               ":id" => $cat->id
             ];
 
-            if (isset($cat->image) && !empty($cat->image) && is_string($cat->image)) {
-              $exec[":image"] = $image;
+            if (isset($cat->image) && !empty($cat->image) && is_string($cat->image) && strlen($cat->image) > 20) {
+              $exec[":image"] = $cat->image;
               $image_on = ", image = :image";
             }
 
@@ -397,40 +398,13 @@ class Menu {
             }
 
           }else {
-            echo "no access to this category";
-            print_r($cat);
+            return false;
             exit();
           }
 
-        }else {
+        }else {// insert cat
 
-          // insert cat
-          $image = $cat->image ?? Router::route("img/categories/default.jpg");
-
-          $sql = $db->dbh->prepare("INSERT INTO categories (name, image, menu) VALUES (:name, :image, :menu)");
-          $result = $sql->execute([
-            ":name"   => $cat->name,
-            ":image"  => $image,
-            ":menu"   => $this->id
-          ]);
-          $cat_id = $db->dbh->lastInsertId();
-
-          if (count($cat->foods) > 0) {
-
-            foreach ($cat->foods as $food) {
-
-              $sql = $db->dbh->prepare("INSERT INTO foods (name, price, description, image, category) VALUES (:name, :price, :desc, :img, :cat)");
-              $result = $sql->execute([
-                ":name"   => $food->name,
-                ":price"  => $food->price,
-                ":desc"   => $food->desc,
-                ":img"   => Router::route("img/foods/default.jpg"),
-                ":cat"    => $cat_id
-              ]);
-            }
-
-          }
-
+          Category::insert_category($cat->name, $cat->image, $this->id, $cat->foods);
         }
       }
 
@@ -443,5 +417,66 @@ class Menu {
 
   }
 
+  public function delete_menu() {
+
+    $db = DBC::get_instance();
+
+    $sql = $db->dbh->prepare("DELETE FROM menus WHERE id = ?");
+    $res = $sql->execute([$this->id]);
+
+    return $res;
+
+  }
+
+  public function delete_category($cats_ids) {
+    $db = DBC::get_instance();
+
+    $sql = $db->dbh->prepare("SELECT C.id FROM categories C WHERE C.menu = ?");
+    $sql->execute([$this->id]);
+    $accessed_cats = $sql->fetchAll(PDO::FETCH_COLUMN, 0);
+
+    $ids_lis = [];
+
+    foreach ($cats_ids as $cat) {
+      if (in_array($cat, $accessed_cats)) {
+        array_push($ids_lis, $cat);
+      }
+    }
+
+    if (count($ids_lis) > 0) {
+      $strimp = implode(",", $ids_lis);
+      $sql = $db->dbh->prepare("DELETE FROM categories WHERE id IN ($strimp)");
+      return $sql->execute();
+    }else {
+      return false;
+    }
+  }
+
+  public function delete_foods($foods_ids) {
+    $db = DBC::get_instance();
+
+    $sql = $db->dbh->prepare(
+      "SELECT F.id FROM foods F
+      INNER JOIN categories C ON C.id = F.category
+      WHERE C.menu = ?");
+    $sql->execute([$this->id]);
+    $accessed_cats = $sql->fetchAll(PDO::FETCH_COLUMN, 0);
+
+    $ids_lis = [];
+
+    foreach ($foods_ids as $food) {
+      if (in_array($food, $accessed_cats)) {
+        array_push($ids_lis, $food);
+      }
+    }
+
+    if (count($ids_lis) > 0) {
+      $strimp = implode(",", $ids_lis);
+      $sql = $db->dbh->prepare("DELETE FROM foods WHERE id IN ($strimp)");
+      return $sql->execute();
+    }else {
+      return false;
+    }
+  }
 
 }

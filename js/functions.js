@@ -198,35 +198,35 @@ function deleteFood(id) {
 
 }
 
-function deleteCategory(id, elm) {
+// function deleteCategory(id, elm) {
 
-  $.ajax({
-    url: `http://food.test/manage/category/delete_category`,
-    type: "POST",
-    data: {
-      "id": id,
-    },
-    beforeSend : function (xhr) {
-      console.log(xhr);
-      let trig = confirm("you are going to lose all food inside this category");
-      if (!trig) {
-        xhr.abort();
-      }
-    },
-  }).done(function(res) {
-    res = JSON.parse(res);
-    if (res) {
-      let parent = elm.parents("[class*=\"col\"]");
-      parent.css("opacity", "0");
-      setTimeout(() => {
-        parent.remove();
-      }, 700);
-    }else {
-      console.error("You Should Handle This Error And Show It");
-    }
-  });
+//   $.ajax({
+//     url: `http://food.test/manage/category/delete_category`,
+//     type: "POST",
+//     data: {
+//       "id": id,
+//     },
+//     beforeSend : function (xhr) {
+//       console.log(xhr);
+//       let trig = confirm("you are going to lose all food inside this category");
+//       if (!trig) {
+//         xhr.abort();
+//       }
+//     },
+//   }).done(function(res) {
+//     res = JSON.parse(res);
+//     if (res) {
+//       let parent = elm.parents("[class*=\"col\"]");
+//       parent.css("opacity", "0");
+//       setTimeout(() => {
+//         parent.remove();
+//       }, 700);
+//     }else {
+//       console.error("You Should Handle This Error And Show It");
+//     }
+//   });
 
-}
+// }
 
 function updateFood(id) {
   form = new FormData();

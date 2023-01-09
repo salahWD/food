@@ -2,8 +2,11 @@
 <div id="menuImage" class="page-title bg-light" style="background: url(<?= $menu_info->image;?>) no-repeat;background-size:cover;">
   <div class="container">
     <div class="row">
-      <button class="btn btn-success image-btn" id="MenuimageBtn"><i class="fa fa-image"></i></button>
-      <input type="file" name="image" id="MenuimageInput" class="hide">
+      <div class="btns-flow-right">
+        <button class="btn btn-danger" id="MenuDelete" data-action="delete"><i class="fa-solid fa-lg fa-trash"></i></button>
+        <button class="btn btn-success" id="MenuimageBtn"><i class="fa fa-image"></i></button>
+        <input type="file" name="image" id="MenuimageInput" class="hide">
+      </div>
       <div class="col-lg-8 offset-lg-4">
         <h1 class="menu-title" id="editableTitle" contenteditable="true" autocomplete='off' spellcheck='false' autocorrect='off'><?= $menu_info->name;?></h1>
         <h4 class="menu-desc text-muted" id="editableDesc" contenteditable="true" autocomplete='off' spellcheck='false' autocorrect='off'><?= $menu_info->description;?></h4>
@@ -51,6 +54,7 @@
                         <div class="col-sm-6 text-sm-right">
                           <span class="text-md mr-4"><span class="text-muted">from</span> <?= $restaurant->currency->icon;?><input type="number" class="food-price" value="<?= $foo->price;?>"></span>
                           <a href="<?= Router::route("$restaurant->url_name/f/$foo->id");?>" class="btn btn-outline-secondary btn-sm" data-action="open-cart-modal" data-id="1"><span>Go To</span></a>
+                          <buton class="delete-btn btn btn-outline-danger btn-sm"><i class=" fa-solid fa-x"></i></buton>
                         </div>
                       </div>
                     </div>

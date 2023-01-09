@@ -272,44 +272,9 @@
 	<?php if (isset($_SESSION["admin"]) && !empty($_SESSION["admin"])):?>
 		<script>
 
-			$(document).ready(function(){
+			// $(document).ready(function(){
 
-				/* === Delete Food / Manage Menu === */
-				$(".delete-btn").each(function (index) {
-					$(this).click(function () {
-						let id = $(this).parent().find(".id-value").val();
-						if ($(this).data("type") == "food") {
-							deleteFood(id);
-						}else {
-							deleteCategory(id, $(this));
-						}
-					});
-				});
-
-				/* === Send Form / Manage Menu === */
-				if ("#send-btn") {
-					$(window).keydown(function(event){
-						if(event.keyCode == 13) {// prevent [enter] to send the form
-							event.preventDefault();
-							return false;
-						}
-					});
-
-					$("#send-btn").click(function () {
-						let url = window.location.pathname.split("/");
-						let id = url[4];
-						if ($(this).data("type") == "food") {
-							updateFood(id);
-						}else if ($(this).data("type") == "category") {
-							updateCategory(id);
-						}else if ($(this).data("type") == "Restaurants") {
-							updateRestaurants();
-						}
-					});
-
-				}
-
-			});
+			// });
 
 		</script>
 	<?php endif;?>

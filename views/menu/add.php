@@ -5,8 +5,8 @@
       <button class="btn btn-success image-btn" id="MenuimageBtn"><i class="fa fa-image"></i></button>
       <input type="file" name="image" id="MenuimageInput" class="hide">
       <div class="col-lg-8 offset-lg-4">
-        <h1 class="editable-title" id="editableTitle" contenteditable="true" autocomplete='off' spellcheck='false' autocorrect='off'>Untitled Menu</h1>
-        <h4 class="editable-disc text-muted" id="editableDesc" contenteditable="true" autocomplete='off' spellcheck='false' autocorrect='off'>This is menu description</h4>
+        <h1 class="menu-title" id="editableTitle" contenteditable="true" autocomplete='off' spellcheck='false' autocorrect='off'>Untitled Menu</h1>
+        <h4 class="menu-desc text-muted" id="editableDesc" contenteditable="true" autocomplete='off' spellcheck='false' autocorrect='off'>This is menu description</h4>
       </div>
     </div>
   </div>
